@@ -44,9 +44,7 @@ This project is inspired by Taiwanese culture, where food waste is strongly disc
 
 ---
 
----
-
-## 🚀 Goal
+## Goal
 FridgeMate aims to:
 - **Simplify meal planning**  
 - **Reduce food waste**  
