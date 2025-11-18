@@ -1,23 +1,24 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
-<head>
-  <meta charset="utf-8" />
-  <title>FidgeMate - Browser</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FridgeMate</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
 
-<body>
-  <h1>FidgeMate - Browser Client</h1>
-  <div id="app">
-  </div>
+  <body>
+    <header class="app-header">
+      <div class="header-content">
+        <h1 class="app-title">FridgeMate</h1>
+        <div class="user-section">
+          <button id="logoutBtn" class="btn btn-logout">Logout</button>
+        </div>
+      </div>
+    </header>
 
-  <script src="app.js">
-    window.onload = function () {
-      const appDiv = document.getElementById('app');
-      appDiv.innerHTML = '<p>Bienvenue dans FidgeMate!</p>';
-    };
-  </script>
-</body>
+    <script type="module" src="src/app.js"></script>
+  </body>
 
 </html>
