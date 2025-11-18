@@ -1,10 +1,16 @@
 {
-  "name": "multi-clientapp-electron",
+  "name": "electron-client",
   "version": "1.0.0",
+  "description": "",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "electron": "^39.2.1"
+  }
 }
