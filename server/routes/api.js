@@ -26,11 +26,11 @@ router.get('/:userId', async function(req, res) {
 
 router.post('/', async function(req, res) {
   try {
-    const { username, email, password } = req.body;
-    if (!username || !email || !password) {
-      return res.status(400).send({ error: 'username, email et password requis' });
+    const { username } = req.body;
+    if (!username) {
+      return res.status(400).send({ error: 'username requis' });
     }
-    const newUser = await users.createUser(username, email, password);
+    const newUser = await users.createUser(username);
     res.status(201).send(newUser);
   } catch (err) {
     res.status(500).send({ error: err.message });
@@ -39,8 +39,8 @@ router.post('/', async function(req, res) {
 
 router.put('/:userId', async function(req, res) {
   try {
-    const { username, email } = req.body;
-    await users.updateUser(req.params.userId, username, email);
+    const { username } = req.body;
+    await users.updateUser(req.params.userId, username);
     res.send({ message: 'User updated' });
   } catch (err) {
     res.status(500).send({ error: err.message });
@@ -71,51 +71,25 @@ router.post('/login', async function(req, res) {
 
 /*--- Fridge Routes ---*/
 
-router.get('/:userId/fridges', async function(req, res) {
+// Get user's single fridge
+router.get('/:userId/fridge', async function(req, res) {
   try {
-    const userFridges = await fridges.getFridgesByUserId(req.params.userId);
-    res.send({ fridges: userFridges });
+    const userFridge = await fridges.getFridgeByUserId(req.params.userId);
+    res.send({ fridge: userFridge });
   } catch (err) {
     res.status(500).send({ error: err.message });
   }
 });
 
-router.post('/:userId/fridges', async function(req, res) {
+// Update user's fridge
+router.put('/:userId/fridge', async function(req, res) {
   try {
     const { name, description } = req.body;
     if (!name) {
-      return res.status(400).send({ error: 'name requis' });
+      return res.status(400).send({ error: 'name required' });
     }
-    const newFridge = await fridges.createFridge(req.params.userId, name, description || '');
-    res.status(201).send(newFridge);
-  } catch (err) {
-    res.status(500).send({ error: err.message });
-  }
-});
-
-router.get('/:userId/fridges/:fridgeId', async function(req, res) {
-  try {
-    const fridge = await fridges.getFridgeById(req.params.fridgeId);
-    res.send(fridge);
-  } catch (err) {
-    res.status(500).send({ error: err.message });
-  }
-});
-
-router.put('/:userId/fridges/:fridgeId', async function(req, res) {
-  try {
-    const { name, description } = req.body;
-    await fridges.updateFridge(req.params.fridgeId, name, description);
+    await fridges.updateFridge(req.params.userId, name, description || '');
     res.send({ message: 'Fridge updated' });
-  } catch (err) {
-    res.status(500).send({ error: err.message });
-  }
-});
-
-router.delete('/:userId/fridges/:fridgeId', async function(req, res) {
-  try {
-    await fridges.deleteFridge(req.params.fridgeId);
-    res.send({ message: 'Fridge deleted' });
   } catch (err) {
     res.status(500).send({ error: err.message });
   }
@@ -123,23 +97,27 @@ router.delete('/:userId/fridges/:fridgeId', async function(req, res) {
 
 /*--- Ingredient Routes ---*/
 
-router.get('/:userId/fridges/:fridgeId/ingredients', async function(req, res) {
+// Get ingredients from user's fridge
+router.get('/:userId/fridge/ingredients', async function(req, res) {
   try {
-    const fridgeIngredients = await ingredients.getIngredientsByFridgeId(req.params.fridgeId);
+    const userFridge = await fridges.getFridgeByUserId(req.params.userId);
+    const fridgeIngredients = await ingredients.getIngredientsByFridgeId(userFridge.id);
     res.send({ ingredients: fridgeIngredients });
   } catch (err) {
     res.status(500).send({ error: err.message });
   }
 });
 
-router.post('/:userId/fridges/:fridgeId/ingredients', async function(req, res) {
+// Add ingredient to user's fridge
+router.post('/:userId/fridge/ingredients', async function(req, res) {
   try {
     const { name, quantity, unit, expiryDate, category } = req.body;
     if (!name) {
-      return res.status(400).send({ error: 'name requis' });
+      return res.status(400).send({ error: 'name required' });
     }
+    const userFridge = await fridges.getFridgeByUserId(req.params.userId);
     const newIngredient = await ingredients.addIngredient(
-      req.params.fridgeId,
+      userFridge.id,
       name,
       quantity || 0,
       unit || '',
@@ -152,7 +130,8 @@ router.post('/:userId/fridges/:fridgeId/ingredients', async function(req, res) {
   }
 });
 
-router.put('/:userId/fridges/:fridgeId/ingredients/:ingredientId', async function(req, res) {
+// Update ingredient in user's fridge
+router.put('/:userId/fridge/ingredients/:ingredientId', async function(req, res) {
   try {
     const { name, quantity, unit, expiryDate, category } = req.body;
     await ingredients.updateIngredient(req.params.ingredientId, name, quantity, unit, expiryDate, category);
@@ -162,7 +141,8 @@ router.put('/:userId/fridges/:fridgeId/ingredients/:ingredientId', async functio
   }
 });
 
-router.delete('/:userId/fridges/:fridgeId/ingredients/:ingredientId', async function(req, res) {
+// Delete ingredient from user's fridge
+router.delete('/:userId/fridge/ingredients/:ingredientId', async function(req, res) {
   try {
     await ingredients.deleteIngredient(req.params.ingredientId);
     res.send({ message: 'Ingredient deleted' });

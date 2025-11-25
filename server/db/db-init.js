@@ -6,8 +6,6 @@ db.serialize(() => {
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
             createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
         )
     `);
@@ -15,8 +13,8 @@ db.serialize(() => {
     db.run(`
         CREATE TABLE IF NOT EXISTS fridges (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            userId INTEGER NOT NULL,
-            name TEXT NOT NULL,
+            userId INTEGER UNIQUE NOT NULL,
+            name TEXT NOT NULL DEFAULT 'My Fridge',
             description TEXT,
             createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
@@ -34,6 +32,18 @@ db.serialize(() => {
             category TEXT,
             createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (fridgeId) REFERENCES fridges(id) ON DELETE CASCADE
+        )
+    `);
+
+    db.run(`
+        CREATE TABLE IF NOT EXISTS recipes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            description TEXT,
+            ingredients TEXT,
+            instructions TEXT,
+            photoURL TEXT,
+            createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
         )
     `);
 
