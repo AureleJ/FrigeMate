@@ -65,6 +65,7 @@ router.post('/login', async function(req, res) {
     const user = await users.loginUser(username);
     res.send({ success: true, user: user });
   } catch (err) {
+    console.error('Login error:', err.message);
     res.status(401).send({ error: err.message });
   }
 });
@@ -111,6 +112,7 @@ router.get('/:userId/fridge/ingredients', async function(req, res) {
 // Add ingredient to user's fridge
 router.post('/:userId/fridge/ingredients', async function(req, res) {
   try {
+    console.log('Request body for adding ingredient:', req.body);
     const { name, quantity, unit, expiryDate, category } = req.body;
     if (!name) {
       return res.status(400).send({ error: 'name required' });

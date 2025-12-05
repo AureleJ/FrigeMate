@@ -30,20 +30,9 @@ db.serialize(() => {
             unit TEXT,
             expiryDate DATE,
             category TEXT,
+            image TEXT,
             createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (fridgeId) REFERENCES fridges(id) ON DELETE CASCADE
-        )
-    `);
-
-    db.run(`
-        CREATE TABLE IF NOT EXISTS recipes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            description TEXT,
-            ingredients TEXT,
-            instructions TEXT,
-            photoURL TEXT,
-            createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
         )
     `);
 

@@ -21,10 +21,9 @@ function getUserById(id) {
 function createUser(username) {
     return new Promise((resolve, reject) => {
         db.run(
-            'INSERT INTO users (username) VALUES (?)',
-            [username],
-            function(err) {
-                if (err) reject(err);
+            'INSERT INTO users (username) VALUES (?)', [username], function(err) {
+                if (err && err.code === 'SQLITE_CONSTRAINT') reject(new Error('Username already exists'));
+                else if (err) reject(err);
                 else resolve({ id: this.lastID, username });
             }
         );
@@ -34,9 +33,7 @@ function createUser(username) {
 function updateUser(id, username) {
     return new Promise((resolve, reject) => {
         db.run(
-            'UPDATE users SET username = ? WHERE id = ?',
-            [username, id],
-            (err) => {
+            'UPDATE users SET username = ? WHERE id = ?', [username, id], (err) => {
                 if (err) reject(err);
                 else resolve();
             }

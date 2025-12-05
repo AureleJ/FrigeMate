@@ -18,12 +18,12 @@ function getIngredientById(id) {
     });
 }
 
-function addIngredient(fridgeId, name, quantity, unit, expiryDate, category) {
-    return new Promise((resolve, reject) => {
+async function addIngredient(fridgeId, name, quantity, unit, expiryDate, category) {
+    return new Promise(async (resolve, reject) => {
         db.run(
             'INSERT INTO ingredients (fridgeId, name, quantity, unit, expiryDate, category) VALUES (?, ?, ?, ?, ?, ?)',
             [fridgeId, name, quantity, unit, expiryDate, category],
-            function(err) {
+            function (err) {
                 if (err) reject(err);
                 else resolve({ id: this.lastID, fridgeId, name, quantity, unit, expiryDate, category });
             }
