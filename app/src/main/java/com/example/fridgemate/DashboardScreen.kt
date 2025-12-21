@@ -23,7 +23,15 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Canvas
 import androidx.compose.material.icons.filled.QrCodeScanner // Import icone
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Canvas
+import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.Dialog // Import Dialog pour le scanner full screen
 
 @Composable
@@ -68,21 +76,54 @@ fun DashboardScreen(userId: String) {
                     ErrorCard(state.message) { viewModel.loadData(userId) }
                 }
                 is DashboardUiState.Success -> {
-                    // 1. Alerts
+                    // --- 1. CALCUL DES STATS (Front-End) ---
+                    val ingredients = state.ingredients
+                    val totalCount = ingredients.size
+
+                    // On analyse chaque ingrédient pour voir s'il est périmé
+                    var expiredCount = 0
+                    var expiringSoonCount = 0
+
+                    ingredients.forEach { ing ->
+                        val days = getDaysRemaining(ing.expiryDate)
+                        if (days != null) {
+                            if (days < 0) expiredCount++      // Périmé
+                            else if (days <= 3) expiringSoonCount++ // Bientôt (<= 3 jours)
+                        }
+                    }
+
+                    // On groupe les ingrédients par catégorie pour le graphique
+                    // Ex: { "Meat": 2, "Dairy": 5, "General": 1 }
+                    val categoryDistribution = ingredients
+                        .groupingBy {
+                            // On met une majuscule et une valeur par défaut
+                            it.category?.replaceFirstChar { char -> char.uppercase() } ?: "General"
+                        }
+                        .eachCount()
+
+                    // --- 2. AFFICHAGE DES SECTIONS ---
+
+                    // Alertes (inchangé)
                     if (state.alerts.isNotEmpty()) {
                         AlertSection(state.alerts)
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
-                    // 2. Fridge Summary (Traduit)
-                    FridgeSummarySection(state.ingredients.size)
+                    // Résumé Frigo (NOUVELLE VERSION AVEC LES VARIABLES CALCULÉES)
+                    FridgeSummarySection(
+                        totalCount = totalCount,
+                        expiringSoonCount = expiringSoonCount,
+                        expiredCount = expiredCount,
+                        categoryDistribution = categoryDistribution
+                    )
+
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // 3. My Fridge List (NOUVELLE SECTION)
-                    Text("My Fridge Content", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = TextDark)
+                    // Liste complète (Ta nouvelle section liste)
+                    Text("My Fridge Content", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = WebTextDark)
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    state.ingredients.forEach { ingredient ->
+                    ingredients.forEach { ingredient ->
                         IngredientItem(
                             ingredient = ingredient,
                             onDelete = { viewModel.deleteIngredient(ingredient.id) }
@@ -90,7 +131,7 @@ fun DashboardScreen(userId: String) {
                         Spacer(modifier = Modifier.height(8.dp))
                     }
 
-                    // Espace vide pour que le FAB ne cache pas le dernier élément
+                    // Espace pour le bouton flottant
                     Spacer(modifier = Modifier.height(80.dp))
                 }
             }
@@ -252,38 +293,167 @@ fun AlertSection(alerts: List<IngredientAlert>) {
 }
 
 @Composable
-fun FridgeSummarySection(totalCount: Int) {
-    Card(
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(2.dp),
-        shape = RoundedCornerShape(12.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text("Fridge Summary", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = TextDark)
-            Spacer(modifier = Modifier.height(16.dp))
+fun FridgeSummarySection(
+    totalCount: Int,
+    expiringSoonCount: Int,
+    expiredCount: Int,
+    categoryDistribution: Map<String, Int>
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+
+        // --- PARTIE 1 : FRIDGE OVERVIEW (Les 3 cartes) ---
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Text(
+                "Fridge Overview",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = WebTextDark
+            )
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Column {
-                    Text("$totalCount", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = TextDark)
-                    Text("ingredients", color = TextDark)
-                }
+                // On utilise un poids (weight) de 1f pour qu'elles aient toutes la même largeur
+                OverviewStatCard("Items", totalCount.toString(), Modifier.weight(1f))
+                OverviewStatCard("Expiring Soon", expiringSoonCount.toString(), Modifier.weight(1f))
+                OverviewStatCard("Expired", expiredCount.toString(), Modifier.weight(1f), isDanger = expiredCount > 0)
+            }
+        }
 
-                Box(contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(
-                        progress = { 0.7f },
-                        modifier = Modifier.size(70.dp),
-                        color = GreenPrimary,
-                        trackColor = GreenLight,
-                        strokeWidth = 6.dp,
-                    )
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Full", fontSize = 10.sp, color = GreenPrimary, fontWeight = FontWeight.Bold)
-                        Text("70%", fontSize = 10.sp, color = GreenPrimary)
+        // --- PARTIE 2 : CATEGORY DISTRIBUTION (Le Graphique) ---
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Text(
+                "Category Distribution",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = WebTextDark
+            )
+
+            Card(
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(1.dp), // Ombre légère comme sur le web
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier.padding(24.dp).fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    if (categoryDistribution.isNotEmpty()) {
+                        DonutChartWithLegend(categoryDistribution)
+                    } else {
+                        Text("No data available", color = WebTextGray, fontSize = 14.sp)
                     }
+                }
+            }
+        }
+    }
+}
+
+// --- Petite carte carrée pour les stats ---
+@Composable
+fun OverviewStatCard(label: String, count: String, modifier: Modifier = Modifier, isDanger: Boolean = false) {
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF8F9FA)), // Gris très clair pour le fond des petites cartes
+        shape = RoundedCornerShape(8.dp),
+        elevation = CardDefaults.cardElevation(0.dp) // Design "plat"
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(vertical = 16.dp, horizontal = 4.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = count,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
+                color = if (isDanger) WebRed else WebTextDark
+            )
+            Text(
+                text = label,
+                fontSize = 11.sp,
+                color = WebTextGray,
+                textAlign = TextAlign.Center,
+                lineHeight = 14.sp
+            )
+        }
+    }
+}
+
+// --- Le Graphique Donut et sa Légende ---
+@Composable
+fun DonutChartWithLegend(data: Map<String, Int>) {
+    // Couleurs inspirées de ton image (Orange, Vert, Jaune, Bleu)
+    val chartColors = listOf(
+        Color(0xFFFF8A65), // Orange (General)
+        Color(0xFF00C853), // Vert (Meat)
+        Color(0xFFFFD600), // Jaune (Vegetable)
+        Color(0xFF2979FF), // Bleu (Dairy)
+        Color(0xFFAA00FF)  // Violet (Autre)
+    )
+
+    val total = data.values.sum().toFloat()
+    val proportions = data.values.map { it / total }
+    val labels = data.keys.toList()
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        // 1. DESSIN DU GRAPHIQUE
+        Box(
+            modifier = Modifier.size(140.dp), // Taille du donut
+            contentAlignment = Alignment.Center
+        ) {
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                val strokeWidth = 50f // Épaisseur de l'anneau
+                var startAngle = -90f // Commencer en haut
+
+                proportions.forEachIndexed { index, fraction ->
+                    val sweepAngle = fraction * 360f
+                    // Espace entre les segments (optionnel, pour faire joli comme sur l'image)
+                    val gapAngle = 2f
+
+                    drawArc(
+                        color = chartColors[index % chartColors.size],
+                        startAngle = startAngle + (gapAngle / 2),
+                        sweepAngle = sweepAngle - gapAngle,
+                        useCenter = false,
+                        style = Stroke(width = strokeWidth, cap = StrokeCap.Butt),
+                        size = Size(size.width, size.height),
+                        topLeft = Offset(0f, 0f)
+                    )
+                    startAngle += sweepAngle
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // 2. LA LÉGENDE
+        // On utilise un FlowRow si dispo, sinon une simple Row avec wrap manuel
+        // Ici, une Row simple centrée qui passe à la ligne si besoin (approximatif pour mobile)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            labels.forEachIndexed { index, label ->
+                if (index > 0) Spacer(modifier = Modifier.width(12.dp))
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(10.dp)
+                            .background(chartColors[index % chartColors.size], RoundedCornerShape(2.dp))
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = label,
+                        fontSize = 12.sp,
+                        color = WebTextGray,
+                        fontWeight = FontWeight.Medium
+                    )
                 }
             }
         }
@@ -301,3 +471,15 @@ fun ErrorCard(message: String, onRetry: () -> Unit) {
     }
 }
 
+fun getDaysRemaining(dateString: String?): Long? {
+    if (dateString.isNullOrEmpty()) return null
+    return try {
+        val format = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
+        val cleanDate = if (dateString.contains("T")) dateString.split("T")[0] else dateString
+        val date = format.parse(cleanDate) ?: return null
+        val diff = date.time - System.currentTimeMillis()
+        java.util.concurrent.TimeUnit.MILLISECONDS.toDays(diff)
+    } catch (e: Exception) {
+        null
+    }
+}

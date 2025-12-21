@@ -6,6 +6,8 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 import com.google.gson.annotations.SerializedName
 import okhttp3.ResponseBody
+import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 
 /* --- 1. LOGIN & USER --- */
 data class LoginRequest(val username: String)
@@ -152,9 +154,40 @@ object OffRetrofitClient {
 
 /* --- 5. CLIENT RETROFIT --- */
 object RetrofitClient {
+
+    // 1. La nouvelle URL (IMPORTANT : Garde le '/' à la fin !)
+    private const val BASE_URL = "https://frigemate-server.onrender.com/"
+
+    // 2. Ta clé API
+    private const val API_KEY = "tie-un-tigre"
+
+    // Configuration du client HTTP pour ajouter la clé automatiquement
+    private val okHttpClient: OkHttpClient by lazy {
+        val builder = OkHttpClient.Builder()
+
+            // Ajout de la clé API dans l'en-tête (Header) de chaque requête
+            .addInterceptor { chain ->
+                val original = chain.request()
+                val requestBuilder = original.newBuilder()
+                    // ⚠️ Vérifie le nom du header côté serveur (souvent "x-api-key", "Authorization" ou "api_key")
+                    // Si tu n'es pas sûr, essaie "x-api-key" ou demande-moi selon ton code serveur.
+                    .header("x-api-key", API_KEY)
+                    .method(original.method, original.body)
+
+                chain.proceed(requestBuilder.build())
+            }
+
+            // Augmenter le temps d'attente (Render peut être lent au réveil)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+
+        builder.build()
+    }
+
     val apiService: FridgeApiService by lazy {
         Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:3000/")
+            .baseUrl(BASE_URL)
+            .client(okHttpClient) // On attache le client sécurisé ici
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(FridgeApiService::class.java)

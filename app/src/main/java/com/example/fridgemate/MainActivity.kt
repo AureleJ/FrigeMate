@@ -22,10 +22,9 @@ import androidx.navigation.compose.rememberNavController
 
 // --- Routes ---
 sealed class Screen(val route: String, val title: String, val icon: ImageVector) {
-    object Dashboard : Screen("dashboard", "Mon Frigo", Icons.Default.Kitchen)
-    object Recipes : Screen("recipes", "Recettes", Icons.Default.RestaurantMenu)
-    object Planning : Screen("planning", "Planning", Icons.Default.CalendarMonth)
-    object Shopping : Screen("shopping", "Courses", Icons.Default.ShoppingCart)
+    object Dashboard : Screen("dashboard", "My Fridge", Icons.Default.Kitchen)
+    object Ingredients : Screen("ingredients", "Ingredients", Icons.Filled.Inventory2)
+    object Recipes : Screen("recipes", "Recipes", Icons.Default.RestaurantMenu)
 }
 
 class MainActivity : ComponentActivity() {
@@ -51,9 +50,8 @@ fun MainScreenApp() {
 
     // Titre dynamique selon l'écran
     val currentScreenTitle = when (currentRoute) {
+        Screen.Ingredients.route -> Screen.Ingredients.title
         Screen.Recipes.route -> Screen.Recipes.title
-        Screen.Planning.route -> Screen.Planning.title
-        Screen.Shopping.route -> Screen.Shopping.title
         else -> Screen.Dashboard.title
     }
 
@@ -101,7 +99,7 @@ fun MainScreenApp() {
 
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
-    val screens = listOf(Screen.Dashboard, Screen.Recipes, Screen.Planning, Screen.Shopping)
+    val screens = listOf(Screen.Dashboard, Screen.Ingredients, Screen.Recipes)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
@@ -135,20 +133,16 @@ fun NavigationGraph(navController: NavHostController, userId: String) {
             DashboardScreen(userId = userId)
         }
 
+        composable(Screen.Ingredients.route) {
+            IngredientScreen(
+                userId = userId
+            )
+        }
+
         // 2. RECETTES (Pointe vers ton fichier RecipeSection.kt)
         composable(Screen.Recipes.route) {
             // J'assume que dans RecipeSection.kt tu as une fonction @Composable nommée RecipeScreen()
             RecipeScreen()
-        }
-
-        // 3. PLANNING (Pointe vers PlanningScreen.kt)
-        composable(Screen.Planning.route) {
-            PlanningScreen()
-        }
-
-        // 4. SHOPPING (Pointe vers ShoppingListScreen.kt)
-        composable(Screen.Shopping.route) {
-            ShoppingListScreen()
         }
     }
 }
