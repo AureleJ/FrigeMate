@@ -3,6 +3,7 @@ import { authService } from '../services/auth';
 import Sidebar from '../components/Slidebar';
 import MyFridge from './MyFridge';
 import Ingredients from './Ingredients';
+import Loading from './Loading';
 import Recipes from './Recipes';
 import { apiService } from '../services/api';
 
@@ -119,13 +120,17 @@ const Dashboard = () => {
         }
     };
 
+    if (loading) {
+        return <Loading />;
+    }
+
     return (
         <>
             <Sidebar user={user} currentView={currentView} navigateTo={setCurrentView} />
 
             <div className="main-content">
                 <div className="content-wrapper">
-                    {loading ? <p>Loading...</p> : renderContent()}
+                    {renderContent()}
                 </div>
             </div>
         </>

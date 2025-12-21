@@ -14,7 +14,6 @@ const Recipes = ({ recipes, userIngredients = [] }) => {
         if (recipes) {
             let filtered = [...recipes];
 
-            // Filter by selected ingredients
             if (selectedIngredients.length > 0) {
                 filtered = filtered.filter(recipe => 
                     selectedIngredients.every(selectedIng => 
