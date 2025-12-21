@@ -48,6 +48,7 @@ fun MainScreenApp() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
+
     // Titre dynamique selon l'écran
     val currentScreenTitle = when (currentRoute) {
         Screen.Recipes.route -> Screen.Recipes.title
@@ -56,25 +57,44 @@ fun MainScreenApp() {
         else -> Screen.Dashboard.title
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        if (currentRoute == Screen.Dashboard.route || currentRoute == null) {
-                            Icon(Icons.Default.Kitchen, contentDescription = null, tint = Color.White)
-                            Spacer(modifier = Modifier.width(8.dp))
+    var userId by remember { mutableStateOf<String?>(null) }
+
+    // AJOUTEZ CE LOG
+    println("DEBUG: MainScreenApp lancé. UserId est : $userId")
+
+    if (userId == null) {
+        println("DEBUG: Affichage du LoginScreen") // <--- Mouchard
+        LoginScreen(onLoginSuccess = { id -> userId = id })
+    } else {
+        println("DEBUG: Affichage du Scaffold (Connecté)") // <--- Mouchard
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            if (currentRoute == Screen.Dashboard.route || currentRoute == null) {
+                                Icon(
+                                    Icons.Default.Kitchen,
+                                    contentDescription = null,
+                                    tint = Color.White
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                            }
+                            Text(
+                                "FridgeMate $currentScreenTitle",
+                                fontSize = 18.sp,
+                                color = Color.White
+                            )
                         }
-                        Text("FridgeMate $currentScreenTitle", fontSize = 18.sp, color = Color.White)
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = GreenPrimary)
-            )
-        },
-        bottomBar = { BottomNavigationBar(navController = navController) }
-    ) { paddingValues ->
-        Box(modifier = Modifier.padding(paddingValues)) {
-            NavigationGraph(navController = navController)
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = GreenPrimary)
+                )
+            },
+            bottomBar = { BottomNavigationBar(navController = navController) }
+        ) { paddingValues ->
+            Box(modifier = Modifier.padding(paddingValues)) {
+                NavigationGraph(navController = navController, userId = userId!!)
+            }
         }
     }
 }
@@ -107,14 +127,12 @@ fun BottomNavigationBar(navController: NavHostController) {
 }
 
 @Composable
-fun NavigationGraph(navController: NavHostController) {
+fun NavigationGraph(navController: NavHostController, userId: String) {
     NavHost(navController, startDestination = Screen.Dashboard.route) {
 
         // 1. DASHBOARD (Directement ici car pas de fichier DashboardScreen.kt dans ton image)
         composable(Screen.Dashboard.route) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Tableau de Bord (À coder)")
-            }
+            DashboardScreen(userId = userId)
         }
 
         // 2. RECETTES (Pointe vers ton fichier RecipeSection.kt)
