@@ -4,10 +4,11 @@ import AddIngredientForm from '../components/AddIngredientForm';
 
 
 const Ingredients = ({ ingredients, fridge, error, onAdd, onRemove }) => {
-    const [isAddingIngredient, setIsAddingIngredient] = React.useState(false);
+    const [isAddingIngredient, setIsAddingIngredient] = useState(false);
 
     return (
         <>
+            <h2 className="page-title">My Ingredients</h2>
             <IngredientList ingredients={ingredients} onRemove={onRemove} />
 
             {isAddingIngredient && (
@@ -20,7 +21,7 @@ const Ingredients = ({ ingredients, fridge, error, onAdd, onRemove }) => {
                 />
             )}
 
-            <button className="btn-add-ingredient btn btn-primary" style={{ flexShrink: 0 }} onClick={() => setIsAddingIngredient(true)}>Add Ingredient</button>
+            <button className="btn-add-ingredient btn btn-primary" onClick={() => setIsAddingIngredient(true)}>Add Ingredient</button>
         </>
     );
 }

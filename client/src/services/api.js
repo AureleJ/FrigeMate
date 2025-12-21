@@ -93,6 +93,21 @@ class ApiService {
             body: JSON.stringify(ingredientData)
         });
     }
+
+    async getRecipes() {
+        return this.request('/recipes');
+    }
+
+    async getRecipeById(recipeId) {
+        return this.request(`/recipes/${recipeId}`);
+    }
+
+    async searchRecipes(ingredients) {
+        return this.request('/recipes/search', {
+            method: 'POST',
+            body: JSON.stringify({ ingredients })
+        });
+    }
 }
 
 export const apiService = new ApiService();

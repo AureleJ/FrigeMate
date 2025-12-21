@@ -45,7 +45,7 @@ const IngredientItem = ({ type, ingredient, onRemove }) => {
 
                 {urgencyBadge && (
                     <div className="urgency-indicator">
-                        <span className="urgency-dot" style={{ backgroundColor: isExpired ? '#ea5640' : '#eda82fff' }}></span>
+                        <span className={`urgency-dot ${statusClass}`}></span>
                         <span className="urgency-text-small">{isExpired ? 'Expired' : `${diffDays} day${diffDays > 1 ? 's' : ''}`}</span>
                     </div>
                 )}
@@ -66,7 +66,7 @@ const IngredientItem = ({ type, ingredient, onRemove }) => {
                 <div className="ingredient-right-header">
                     <h4 className="ingredient-name">{ingredient.name}</h4>
                     {urgencyBadge && (
-                        <span className="urgency-badge" style={{ backgroundColor: isExpired ? '#ea5640' : '#eda82fff' }}>
+                        <span className={`urgency-badge ${statusClass}`}>
                             {urgencyBadge}
                         </span>
                     )}

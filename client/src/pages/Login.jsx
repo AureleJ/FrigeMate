@@ -59,28 +59,20 @@ const Login = () => {
                         />
                     </div>
 
-                    {error && <div className="error-message" style={{color: 'var(--ios-red)', marginBottom: '10px', fontSize: '14px'}}>{error}</div>}
+                    {error && <div className="login-error">{error}</div>}
 
                     <button type="submit" className="btn btn-primary btn-login" disabled={isLoading}>
                         {isLoading ? 'Please wait...' : (isRegisterMode ? 'Sign Up' : 'Sign In')}
                     </button>
 
-                    <div style={{marginTop: '20px', fontSize: '14px', color: 'var(--text-secondary)'}}>
+                    <div className="login-toggle-container">
                         {isRegisterMode ? 'Already have an account? ' : "Don't have an account? "}
                         <button 
                             type="button" 
+                            className="btn-text"
                             onClick={() => {
                                 setIsRegisterMode(!isRegisterMode);
                                 setError('');
-                            }}
-                            style={{
-                                background: 'none', 
-                                border: 'none', 
-                                color: 'var(--ios-blue)', 
-                                fontWeight: '600', 
-                                cursor: 'pointer',
-                                padding: 0,
-                                fontSize: 'inherit'
                             }}
                         >
                             {isRegisterMode ? 'Sign In' : 'Sign Up'}

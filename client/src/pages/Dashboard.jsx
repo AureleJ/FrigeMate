@@ -3,6 +3,7 @@ import { authService } from '../services/auth';
 import Sidebar from '../components/Slidebar';
 import MyFridge from './MyFridge';
 import Ingredients from './Ingredients';
+import Recipes from './Recipes';
 import { apiService } from '../services/api';
 
 const Dashboard = () => {
@@ -12,6 +13,8 @@ const Dashboard = () => {
     const [fridge, setFridge] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [recipes, setRecipes] = useState([]);
+    const [recipeOfTheDay, setRecipeOfTheDayState] = useState(null);
 
     const loadIngredients = async () => {
         try {
@@ -53,25 +56,66 @@ const Dashboard = () => {
         }
     };
 
+    const loadRecipes = async () => {
+        try {
+            const data = await apiService.getRecipes();
+            setRecipes(data.recipes || []);
+            console.log('Loaded recipes data:', data);
+        } catch (err) {
+            setError('Failed to load recipes');
+            console.error(err);
+        }
+    };
+
     useEffect(() => {
-        setLoading(true);
-        loadFridge();
-        loadIngredients();
-        setLoading(false);
+        if (recipes.length > 0 && ingredients.length > 0) {
+            const sortedIngredients = [...ingredients]
+                .filter(ing => ing.expiryDate >= new Date().toISOString())
+                .sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
+            console.log('Sorted ingredients by expiry date:', sortedIngredients);
+
+            let foundRecipe = null;
+
+            for (const ingredient of sortedIngredients) {
+                const ingredientName = ingredient.name.toLowerCase();
+
+                foundRecipe = recipes.find(recipe =>
+                    recipe.ingredients.some(rIng =>
+                        rIng.item.toLowerCase().includes(ingredientName)
+                    )
+                );
+                
+                if (foundRecipe) break;
+            }
+
+            setRecipeOfTheDayState(foundRecipe || null);
+        }
+    }, [recipes, ingredients]);
+
+    useEffect(() => {
+        const loadData = async () => {
+            setLoading(true);
+            await loadFridge();
+            await loadIngredients();
+            await loadRecipes();
+            setLoading(false);
+        };
+
+        loadData();
     }, []);
 
     const renderContent = () => {
         switch (currentView) {
             case 'fridge':
-                return <MyFridge fridge={fridge} ingredients={ingredients} onRemove={handleRemoveIngredient} onAdd={handleAddIngredient} error={error} />;
+                return <MyFridge fridge={fridge} ingredients={ingredients} onRemove={handleRemoveIngredient} error={error} recipeOfTheDay={recipeOfTheDay} />;
             case 'ingredients':
                 return <Ingredients ingredients={ingredients} onRemove={handleRemoveIngredient} onAdd={handleAddIngredient} error={error} />;
             case 'recipes':
-                return <h2>Recipes</h2>;
+                return <Recipes recipes={recipes} userIngredients={ingredients} />;
             case 'settings':
                 return <h2>Settings</h2>;
             default:
-                return <MyFridge fridge={fridge} ingredients={ingredients} onRemove={handleRemoveIngredient} onAdd={handleAddIngredient} error={error} />;
+                return <MyFridge fridge={fridge} ingredients={ingredients} onRemove={handleRemoveIngredient} error={error} recipeOfTheDay={recipeOfTheDay} />;
         }
     };
 

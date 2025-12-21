@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import IngredientList from '../components/IngredientList';
+import RecipeModal from '../components/RecipeModal';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AA336A'];
 
 const MyPieChart = ({ data }) => {
     if (!data || data.length === 0) {
-        return <div style={{ textAlign: 'center', padding: '20px', color: '#888' }}>No data available</div>;
+        return <div className="no-data-message">No data available</div>;
     }
 
     return (
-        <div style={{ width: '100%', height: 300 }}>
+        <div className="chart-wrapper">
             <ResponsiveContainer>
                 <PieChart>
                     <Pie
@@ -28,11 +29,13 @@ const MyPieChart = ({ data }) => {
                     </Pie>
                     <Tooltip
                         contentStyle={{
-                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            backgroundColor: 'var(--bg-card)',
                             borderRadius: '12px',
-                            border: 'none',
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                            border: '1px solid var(--border-color)',
+                            boxShadow: 'var(--shadow-lg)',
+                            color: 'var(--text-primary)'
                         }}
+                        itemStyle={{ color: 'var(--text-primary)' }}
                     />
                     <Legend verticalAlign="bottom" height={36} />
                 </PieChart>
@@ -41,7 +44,9 @@ const MyPieChart = ({ data }) => {
     );
 };
 
-const MyFridge = ({ ingredients = [], error, onRemove }) => {
+const MyFridge = ({ ingredients = [], error, onRemove, recipeOfTheDay }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const stats = useMemo(() => {
         const today = new Date();
         let soonCount = 0;
@@ -67,7 +72,7 @@ const MyFridge = ({ ingredients = [], error, onRemove }) => {
 
     return (
         <div className="my-fridge-page">
-            <h1>My Fridge</h1>
+            <h2 className="page-title">My Fridge</h2>
 
             <div className="top-container">
                 <div className="section-nearing-expiry section-card">
@@ -114,8 +119,59 @@ const MyFridge = ({ ingredients = [], error, onRemove }) => {
 
             <div className="section-recipe-suggestions section-card">
                 <h2>Recipe of the Day</h2>
-                <p className="placeholder-text">Based on your fridge content...</p>
+                
+                {recipeOfTheDay ? (
+                    <>
+                        <div 
+                            className="recipe-day-card" 
+                            onClick={() => setIsModalOpen(true)}
+                        >
+                            <div className="recipe-day-header">
+                                <h3>{recipeOfTheDay.name}</h3>
+                                <div className="recipe-day-times">
+                                    <span className="time-tag">
+                                        {recipeOfTheDay.prep_time_min}m prep
+                                    </span>
+                                    <span className="time-tag">
+                                        {recipeOfTheDay.cook_time_min}m cook
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <p className="recipe-day-description">{recipeOfTheDay.description}</p>
+                            
+                            <div className="recipe-day-ingredients-preview">
+                                <span className="preview-label">Key Ingredients:</span>
+                                <div className="preview-tags">
+                                    {recipeOfTheDay.ingredients.slice(0, 4).map((ing, i) => (
+                                        <span key={i} className="preview-tag">{ing.item}</span>
+                                    ))}
+                                    {recipeOfTheDay.ingredients.length > 4 && (
+                                        <span className="preview-tag more">+{recipeOfTheDay.ingredients.length - 4} more</span>
+                                    )}
+                                </div>
+                            </div>
+                            
+                            <div className="recipe-day-cta">
+                                Click to view full recipe &rarr;
+                            </div>
+                        </div>
+
+                    </>
+                ) : (
+                    <div className="empty-recipe-day">
+                        <p>Add ingredients to your fridge to get a personalized recommendation!</p>
+                    </div>
+                )}
+
             </div>
+            
+            <RecipeModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)}
+                recipe={recipeOfTheDay} 
+                userIngredients={ingredients}
+            />
         </div>
     );
 }
