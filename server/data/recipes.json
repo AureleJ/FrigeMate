@@ -783,6 +783,1132 @@
         "Drizzle with oil, add smashed garlic cloves, salt, and pepper. Toss to coat.",
         "Roast for 40-45 minutes until chicken skin is crispy and potatoes are golden."
       ]
+    },
+    {
+      "id": 16,
+      "name": "Classic Beef Chili",
+      "description": "A spicy and warming stew packed with protein, perfect for cold nights.",
+      "search_keys": [
+        "ground beef",
+        "beans",
+        "tomatoes",
+        "chili powder",
+        "onion"
+      ],
+      "prep_time_min": 15,
+      "cook_time_min": 45,
+      "ingredients": [
+        {
+          "item": "ground beef",
+          "quantity": 500,
+          "unit": "g"
+        },
+        {
+          "item": "kidney beans",
+          "quantity": 400,
+          "unit": "g"
+        },
+        {
+          "item": "canned tomatoes",
+          "quantity": 400,
+          "unit": "g"
+        },
+        {
+          "item": "onion",
+          "quantity": 1,
+          "unit": "large"
+        },
+        {
+          "item": "chili powder",
+          "quantity": 2,
+          "unit": "tbsp"
+        },
+        {
+          "item": "beef broth",
+          "quantity": 250,
+          "unit": "ml"
+        }
+      ],
+      "instructions": [
+        "Brown the beef and diced onion in a large pot.",
+        "Drain excess fat, then stir in chili powder, cumin, salt, and pepper.",
+        "Add the canned tomatoes, beans (drained), and broth.",
+        "Simmer on low heat for 45 minutes, stirring occasionally until thickened."
+      ]
+    },
+    {
+      "id": 17,
+      "name": "Caprese Salad",
+      "description": "A simple Italian salad made of sliced fresh mozzarella, tomatoes, and sweet basil.",
+      "search_keys": [
+        "tomato",
+        "mozzarella",
+        "basil",
+        "balsamic",
+        "olive oil"
+      ],
+      "prep_time_min": 10,
+      "cook_time_min": 0,
+      "ingredients": [
+        {
+          "item": "tomatoes",
+          "quantity": 3,
+          "unit": "large"
+        },
+        {
+          "item": "fresh mozzarella",
+          "quantity": 250,
+          "unit": "g"
+        },
+        {
+          "item": "fresh basil",
+          "quantity": 1,
+          "unit": "bunch"
+        },
+        {
+          "item": "olive oil",
+          "quantity": 2,
+          "unit": "tbsp"
+        },
+        {
+          "item": "balsamic glaze",
+          "quantity": 1,
+          "unit": "tbsp"
+        }
+      ],
+      "instructions": [
+        "Slice the tomatoes and mozzarella into thick rounds.",
+        "Arrange them on a platter, alternating tomato, cheese, and a basil leaf.",
+        "Drizzle generously with olive oil and balsamic glaze.",
+        "Season with flakey salt and black pepper before serving."
+      ]
+    },
+    {
+      "id": 18,
+      "name": "Easy Banana Bread",
+      "description": "A moist, sweet quick bread made from over-ripe bananas.",
+      "search_keys": [
+        "bananas",
+        "flour",
+        "sugar",
+        "butter",
+        "eggs"
+      ],
+      "prep_time_min": 15,
+      "cook_time_min": 60,
+      "ingredients": [
+        {
+          "item": "ripe bananas",
+          "quantity": 3,
+          "unit": "unit"
+        },
+        {
+          "item": "all-purpose flour",
+          "quantity": 250,
+          "unit": "g"
+        },
+        {
+          "item": "sugar",
+          "quantity": 150,
+          "unit": "g"
+        },
+        {
+          "item": "melted butter",
+          "quantity": 75,
+          "unit": "g"
+        },
+        {
+          "item": "egg",
+          "quantity": 1,
+          "unit": "large"
+        },
+        {
+          "item": "baking soda",
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      ],
+      "instructions": [
+        "Preheat oven to 175°C (350°F) and grease a loaf pan.",
+        "Mash bananas in a bowl and mix with melted butter.",
+        "Stir in sugar, egg, and vanilla extract.",
+        "Mix in the flour and baking soda until just combined.",
+        "Pour into the pan and bake for 1 hour."
+      ]
+    },
+    {
+      "id": 19,
+      "name": "Mushroom Risotto",
+      "description": "Creamy Italian rice dish cooked slowly with broth and savory mushrooms.",
+      "search_keys": [
+        "rice",
+        "mushrooms",
+        "broth",
+        "parmesan",
+        "onion",
+        "wine"
+      ],
+      "prep_time_min": 15,
+      "cook_time_min": 35,
+      "ingredients": [
+        {
+          "item": "arborio rice",
+          "quantity": 300,
+          "unit": "g"
+        },
+        {
+          "item": "mushrooms",
+          "quantity": 250,
+          "unit": "g"
+        },
+        {
+          "item": "vegetable broth",
+          "quantity": 1,
+          "unit": "liter"
+        },
+        {
+          "item": "onion",
+          "quantity": 1,
+          "unit": "small"
+        },
+        {
+          "item": "parmesan cheese",
+          "quantity": 50,
+          "unit": "g"
+        },
+        {
+          "item": "butter",
+          "quantity": 30,
+          "unit": "g"
+        }
+      ],
+      "instructions": [
+        "Sauté chopped onions and sliced mushrooms in butter until soft.",
+        "Add the rice and toast it for 2 minutes, stirring constantly.",
+        "Add warm broth one ladle at a time, stirring until liquid is absorbed before adding more.",
+        "Continue for about 20-25 minutes until rice is creamy and tender.",
+        "Stir in parmesan cheese and serve hot."
+      ]
+    },
+    {
+      "id": 20,
+      "name": "Ultimate Grilled Cheese",
+      "description": "Crispy, buttery bread filled with melted gooey cheese.",
+      "search_keys": [
+        "bread",
+        "cheese",
+        "butter"
+      ],
+      "prep_time_min": 5,
+      "cook_time_min": 10,
+      "ingredients": [
+        {
+          "item": "bread",
+          "quantity": 4,
+          "unit": "slices"
+        },
+        {
+          "item": "cheddar cheese",
+          "quantity": 100,
+          "unit": "g"
+        },
+        {
+          "item": "butter",
+          "quantity": 40,
+          "unit": "g"
+        }
+      ],
+      "instructions": [
+        "Butter one side of each slice of bread.",
+        "Place bread butter-side down in a pan, top with cheese, and place the second slice on top (butter-side up).",
+        "Cook on medium-low heat until golden brown, then flip.",
+        "Cook the other side until crispy and the cheese is fully melted."
+      ]
+    },
+    {
+      "id": 21,
+      "name": "Chicken Noodle Soup",
+      "description": "The classic remedy for a cold, or just a cozy dinner.",
+      "search_keys": [
+        "chicken",
+        "noodles",
+        "carrots",
+        "celery",
+        "broth"
+      ],
+      "prep_time_min": 15,
+      "cook_time_min": 30,
+      "ingredients": [
+        {
+          "item": "cooked chicken",
+          "quantity": 300,
+          "unit": "g"
+        },
+        {
+          "item": "egg noodles",
+          "quantity": 150,
+          "unit": "g"
+        },
+        {
+          "item": "carrots",
+          "quantity": 2,
+          "unit": "medium"
+        },
+        {
+          "item": "celery",
+          "quantity": 2,
+          "unit": "stalks"
+        },
+        {
+          "item": "chicken broth",
+          "quantity": 1.5,
+          "unit": "liter"
+        }
+      ],
+      "instructions": [
+        "Slice carrots and celery into rounds.",
+        "Simmer vegetables in chicken broth for 15 minutes until tender.",
+        "Add the egg noodles and cook according to package time (usually 6-8 minutes).",
+        "Stir in the shredded cooked chicken and heat through."
+      ]
+    },
+    {
+      "id": 22,
+      "name": "Spaghetti Bolognese",
+      "description": "A rich meat-based tomato sauce served over pasta.",
+      "search_keys": [
+        "pasta",
+        "ground beef",
+        "tomato sauce",
+        "onion",
+        "garlic"
+      ],
+      "prep_time_min": 15,
+      "cook_time_min": 40,
+      "ingredients": [
+        {
+          "item": "spaghetti",
+          "quantity": 400,
+          "unit": "g"
+        },
+        {
+          "item": "ground beef",
+          "quantity": 400,
+          "unit": "g"
+        },
+        {
+          "item": "tomato sauce",
+          "quantity": 500,
+          "unit": "ml"
+        },
+        {
+          "item": "onion",
+          "quantity": 1,
+          "unit": "medium"
+        },
+        {
+          "item": "garlic",
+          "quantity": 2,
+          "unit": "cloves"
+        }
+      ],
+      "instructions": [
+        "Sauté onion and garlic until soft, then add ground beef and brown well.",
+        "Pour in the tomato sauce and simmer for 30 minutes to develop flavor.",
+        "Meanwhile, cook spaghetti in salted boiling water.",
+        "Serve the sauce over the drained pasta with grated cheese."
+      ]
+    },
+    {
+      "id": 23,
+      "name": "Avocado Toast with Egg",
+      "description": "A trendy, healthy breakfast rich in healthy fats and protein.",
+      "search_keys": [
+        "bread",
+        "avocado",
+        "eggs",
+        "lemon",
+        "chili flakes"
+      ],
+      "prep_time_min": 5,
+      "cook_time_min": 5,
+      "ingredients": [
+        {
+          "item": "bread",
+          "quantity": 2,
+          "unit": "slices"
+        },
+        {
+          "item": "avocado",
+          "quantity": 1,
+          "unit": "ripe"
+        },
+        {
+          "item": "eggs",
+          "quantity": 2,
+          "unit": "large"
+        },
+        {
+          "item": "lemon juice",
+          "quantity": 1,
+          "unit": "tsp"
+        },
+        {
+          "item": "chili flakes",
+          "quantity": 0.5,
+          "unit": "tsp"
+        }
+      ],
+      "instructions": [
+        "Toast the bread slices until crisp.",
+        "Mash the avocado with lemon juice, salt, and pepper.",
+        "Fry or poach the eggs to your liking.",
+        "Spread avocado on toast, top with an egg, and sprinkle with chili flakes."
+      ]
+    },
+    {
+      "id": 24,
+      "name": "Baked Salmon with Asparagus",
+      "description": "A healthy sheet-pan dinner rich in Omega-3s.",
+      "search_keys": [
+        "salmon",
+        "asparagus",
+        "lemon",
+        "olive oil",
+        "garlic"
+      ],
+      "prep_time_min": 10,
+      "cook_time_min": 15,
+      "ingredients": [
+        {
+          "item": "salmon fillets",
+          "quantity": 2,
+          "unit": "pieces"
+        },
+        {
+          "item": "asparagus",
+          "quantity": 1,
+          "unit": "bunch"
+        },
+        {
+          "item": "lemon",
+          "quantity": 1,
+          "unit": "unit"
+        },
+        {
+          "item": "olive oil",
+          "quantity": 2,
+          "unit": "tbsp"
+        },
+        {
+          "item": "garlic powder",
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      ],
+      "instructions": [
+        "Preheat oven to 200°C (400°F).",
+        "Place salmon and trimmed asparagus on a baking sheet.",
+        "Drizzle everything with olive oil, lemon juice, garlic powder, salt, and pepper.",
+        "Bake for 12-15 minutes until salmon is flaky and asparagus is tender."
+      ]
+    },
+    {
+      "id": 25,
+      "name": "Bean and Cheese Quesadillas",
+      "description": "A quick Mexican-inspired lunch that is crispy and cheesy.",
+      "search_keys": [
+        "tortillas",
+        "black beans",
+        "cheese",
+        "salsa"
+      ],
+      "prep_time_min": 5,
+      "cook_time_min": 10,
+      "ingredients": [
+        {
+          "item": "tortillas",
+          "quantity": 4,
+          "unit": "large"
+        },
+        {
+          "item": "black beans",
+          "quantity": 200,
+          "unit": "g"
+        },
+        {
+          "item": "cheese",
+          "quantity": 150,
+          "unit": "g"
+        },
+        {
+          "item": "salsa",
+          "quantity": 4,
+          "unit": "tbsp"
+        }
+      ],
+      "instructions": [
+        "Rinse and drain black beans.",
+        "Place a tortilla in a dry pan over medium heat.",
+        "Spread cheese, beans, and a little salsa on half the tortilla.",
+        "Fold the tortilla over and cook until crispy, then flip to crisp the other side."
+      ]
+    },
+    {
+      "id": 26,
+      "name": "Classic Egg Salad",
+      "description": "Creamy hard-boiled egg mixture, perfect for sandwiches or salads.",
+      "search_keys": [
+        "eggs",
+        "mayonnaise",
+        "mustard",
+        "green onion"
+      ],
+      "prep_time_min": 10,
+      "cook_time_min": 10,
+      "ingredients": [
+        {
+          "item": "eggs",
+          "quantity": 6,
+          "unit": "large"
+        },
+        {
+          "item": "mayonnaise",
+          "quantity": 3,
+          "unit": "tbsp"
+        },
+        {
+          "item": "mustard",
+          "quantity": 1,
+          "unit": "tsp"
+        },
+        {
+          "item": "green onion",
+          "quantity": 1,
+          "unit": "stalk"
+        }
+      ],
+      "instructions": [
+        "Hard boil the eggs (approx 10 minutes), cool in ice water, and peel.",
+        "Chop the eggs into small pieces.",
+        "Mix in a bowl with mayonnaise, mustard, chopped green onion, salt, and pepper.",
+        "Serve on bread or lettuce leaves."
+      ]
+    },
+    {
+      "id": 27,
+      "name": "Potato Leek Soup",
+      "description": "A French classic (Vichyssoise) that is simple, smooth, and comforting.",
+      "search_keys": [
+        "potatoes",
+        "leeks",
+        "broth",
+        "cream",
+        "butter"
+      ],
+      "prep_time_min": 15,
+      "cook_time_min": 30,
+      "ingredients": [
+        {
+          "item": "potatoes",
+          "quantity": 500,
+          "unit": "g"
+        },
+        {
+          "item": "leeks",
+          "quantity": 2,
+          "unit": "large"
+        },
+        {
+          "item": "vegetable broth",
+          "quantity": 750,
+          "unit": "ml"
+        },
+        {
+          "item": "heavy cream",
+          "quantity": 100,
+          "unit": "ml"
+        },
+        {
+          "item": "butter",
+          "quantity": 30,
+          "unit": "g"
+        }
+      ],
+      "instructions": [
+        "Clean leeks thoroughly and slice the white/light green parts.",
+        "Sauté leeks in butter until soft.",
+        "Add peeled, diced potatoes and broth; simmer for 25 minutes.",
+        "Blend the soup until smooth, stir in cream, and season."
+      ]
+    },
+    {
+      "id": 28,
+      "name": "Chocolate Chip Cookies",
+      "description": "Homemade cookies with chewy centers and crispy edges.",
+      "search_keys": [
+        "flour",
+        "sugar",
+        "butter",
+        "chocolate chips",
+        "vanilla"
+      ],
+      "prep_time_min": 15,
+      "cook_time_min": 10,
+      "ingredients": [
+        {
+          "item": "all-purpose flour",
+          "quantity": 200,
+          "unit": "g"
+        },
+        {
+          "item": "sugar",
+          "quantity": 150,
+          "unit": "g"
+        },
+        {
+          "item": "butter",
+          "quantity": 100,
+          "unit": "g"
+        },
+        {
+          "item": "chocolate chips",
+          "quantity": 150,
+          "unit": "g"
+        },
+        {
+          "item": "egg",
+          "quantity": 1,
+          "unit": "large"
+        }
+      ],
+      "instructions": [
+        "Preheat oven to 180°C (350°F).",
+        "Cream butter and sugar together until fluffy, then beat in the egg.",
+        "Stir in flour and a pinch of salt until a dough forms.",
+        "Fold in chocolate chips.",
+        "Drop spoonfuls onto a baking sheet and bake for 10-12 minutes."
+      ]
+    },
+    {
+      "id": 29,
+      "name": "Quick Vegetable Fried Rice",
+      "description": "Great use for leftover rice and frozen veggies.",
+      "search_keys": [
+        "rice",
+        "peas",
+        "carrots",
+        "soy sauce",
+        "eggs"
+      ],
+      "prep_time_min": 10,
+      "cook_time_min": 10,
+      "ingredients": [
+        {
+          "item": "cooked cold rice",
+          "quantity": 400,
+          "unit": "g"
+        },
+        {
+          "item": "frozen mixed vegetables",
+          "quantity": 150,
+          "unit": "g"
+        },
+        {
+          "item": "eggs",
+          "quantity": 2,
+          "unit": "large"
+        },
+        {
+          "item": "soy sauce",
+          "quantity": 3,
+          "unit": "tbsp"
+        },
+        {
+          "item": "sesame oil",
+          "quantity": 1,
+          "unit": "tbsp"
+        }
+      ],
+      "instructions": [
+        "Scramble eggs in a hot pan and set aside.",
+        "In the same pan, sauté vegetables with sesame oil.",
+        "Add the cold rice and stir-fry for 3 minutes to heat through.",
+        "Stir in the soy sauce and cooked eggs, mixing well before serving."
+      ]
+    },
+    {
+      "id": 30,
+      "name": "Beef Meatballs in Marinara",
+      "description": "Juicy homemade meatballs simmered in a simple tomato sauce.",
+      "search_keys": [
+        "ground beef",
+        "breadcrumbs",
+        "egg",
+        "marinara sauce",
+        "parmesan"
+      ],
+      "prep_time_min": 20,
+      "cook_time_min": 25,
+      "ingredients": [
+        {
+          "item": "ground beef",
+          "quantity": 500,
+          "unit": "g"
+        },
+        {
+          "item": "breadcrumbs",
+          "quantity": 50,
+          "unit": "g"
+        },
+        {
+          "item": "egg",
+          "quantity": 1,
+          "unit": "large"
+        },
+        {
+          "item": "marinara sauce",
+          "quantity": 500,
+          "unit": "ml"
+        },
+        {
+          "item": "parmesan cheese",
+          "quantity": 30,
+          "unit": "g"
+        }
+      ],
+      "instructions": [
+        "Mix beef, breadcrumbs, egg, parmesan, salt, and pepper in a bowl.",
+        "Form into golf-ball sized meatballs.",
+        "Brown meatballs in a skillet with a little oil.",
+        "Pour marinara sauce over the meatballs, cover, and simmer for 15 minutes."
+      ]
+    },
+    {
+      "id": 31,
+      "name": "Beef and Broccoli Stir-Fry",
+      "description": "A classic takeout favorite made fresh at home with a savory ginger-soy sauce.",
+      "search_keys": ["beef", "broccoli", "soy sauce", "ginger", "rice"],
+      "prep_time_min": 15,
+      "cook_time_min": 15,
+      "ingredients": [
+        { "item": "flank steak", "quantity": 400, "unit": "g" },
+        { "item": "broccoli florets", "quantity": 300, "unit": "g" },
+        { "item": "soy sauce", "quantity": 60, "unit": "ml" },
+        { "item": "ginger", "quantity": 1, "unit": "tbsp" },
+        { "item": "garlic", "quantity": 2, "unit": "cloves" },
+        { "item": "cornstarch", "quantity": 1, "unit": "tbsp" }
+      ],
+      "instructions": [
+        "Slice beef thinly against the grain.",
+        "Whisk soy sauce, minced ginger, garlic, cornstarch, and a splash of water.",
+        "Sear beef in a hot wok for 2 minutes, then remove.",
+        "Stir-fry broccoli with a splash of water to steam it.",
+        "Return beef to pan, add sauce, and toss until thickened."
+      ]
+    },
+    {
+      "id": 32,
+      "name": "Traditional Greek Salad",
+      "description": "Fresh, crunchy, and tangy salad with blocks of feta cheese.",
+      "search_keys": ["cucumber", "tomato", "olives", "feta", "oregano"],
+      "prep_time_min": 15,
+      "cook_time_min": 0,
+      "ingredients": [
+        { "item": "cucumber", "quantity": 1, "unit": "large" },
+        { "item": "tomatoes", "quantity": 4, "unit": "medium" },
+        { "item": "kalamata olives", "quantity": 100, "unit": "g" },
+        { "item": "red onion", "quantity": 0.5, "unit": "unit" },
+        { "item": "feta cheese", "quantity": 200, "unit": "g" },
+        { "item": "dried oregano", "quantity": 1, "unit": "tsp" }
+      ],
+      "instructions": [
+        "Chop tomatoes and cucumber into large chunks.",
+        "Slice red onion thinly.",
+        "Combine vegetables and olives in a bowl.",
+        "Top with a large block or cubes of feta.",
+        "Drizzle with olive oil and sprinkle generously with oregano."
+      ]
+    },
+    {
+      "id": 33,
+      "name": "Fudgy Chocolate Brownies",
+      "description": "Rich, dense chocolate squares with a crackly top.",
+      "search_keys": ["chocolate", "butter", "sugar", "cocoa", "eggs"],
+      "prep_time_min": 20,
+      "cook_time_min": 30,
+      "ingredients": [
+        { "item": "butter", "quantity": 150, "unit": "g" },
+        { "item": "dark chocolate", "quantity": 200, "unit": "g" },
+        { "item": "sugar", "quantity": 200, "unit": "g" },
+        { "item": "eggs", "quantity": 3, "unit": "large" },
+        { "item": "flour", "quantity": 100, "unit": "g" },
+        { "item": "cocoa powder", "quantity": 30, "unit": "g" }
+      ],
+      "instructions": [
+        "Preheat oven to 180°C (350°F).",
+        "Melt butter and chocolate together gently.",
+        "Whisk eggs and sugar until pale and fluffy, then fold in chocolate mix.",
+        "Sift in flour and cocoa powder and fold gently.",
+        "Bake in a square tin for 25-30 minutes."
+      ]
+    },
+    {
+      "id": 34,
+      "name": "Homemade Veggie Burgers",
+      "description": "Hearty patties made from black beans and oats.",
+      "search_keys": ["black beans", "oats", "onion", "cumin", "bun"],
+      "prep_time_min": 20,
+      "cook_time_min": 10,
+      "ingredients": [
+        { "item": "black beans canned", "quantity": 400, "unit": "g" },
+        { "item": "rolled oats", "quantity": 50, "unit": "g" },
+        { "item": "onion", "quantity": 0.5, "unit": "unit" },
+        { "item": "cumin", "quantity": 1, "unit": "tsp" },
+        { "item": "egg", "quantity": 1, "unit": "large" }
+      ],
+      "instructions": [
+        "Drain and rinse beans, then mash them in a bowl (keep some texture).",
+        "Mix in oats, finely diced onion, egg, and spices.",
+        "Form into patties and chill for 10 minutes.",
+        "Fry in a pan with oil for 4-5 minutes per side."
+      ]
+    },
+    {
+      "id": 35,
+      "name": "Simple Chicken Curry",
+      "description": "A mild creamy curry sauce suitable for the whole family.",
+      "search_keys": ["chicken", "curry powder", "coconut milk", "onion", "rice"],
+      "prep_time_min": 10,
+      "cook_time_min": 25,
+      "ingredients": [
+        { "item": "chicken breast", "quantity": 500, "unit": "g" },
+        { "item": "onion", "quantity": 1, "unit": "large" },
+        { "item": "curry powder", "quantity": 2, "unit": "tbsp" },
+        { "item": "coconut milk", "quantity": 400, "unit": "ml" },
+        { "item": "tomato paste", "quantity": 1, "unit": "tbsp" }
+      ],
+      "instructions": [
+        "Dice chicken and onion.",
+        "Sauté onion until soft, then add chicken and brown it.",
+        "Stir in curry powder and tomato paste, cooking for 1 minute.",
+        "Pour in coconut milk and simmer for 15 minutes until sauce thickens."
+      ]
+    },
+    {
+      "id": 36,
+      "name": "Overnight Oats with Berries",
+      "description": "No-cook breakfast you prepare the night before.",
+      "search_keys": ["oats", "milk", "chia seeds", "berries", "honey"],
+      "prep_time_min": 5,
+      "cook_time_min": 0,
+      "ingredients": [
+        { "item": "rolled oats", "quantity": 50, "unit": "g" },
+        { "item": "milk", "quantity": 120, "unit": "ml" },
+        { "item": "chia seeds", "quantity": 1, "unit": "tbsp" },
+        { "item": "honey", "quantity": 1, "unit": "tsp" },
+        { "item": "mixed berries", "quantity": 50, "unit": "g" }
+      ],
+      "instructions": [
+        "Combine oats, milk, chia seeds, and honey in a jar.",
+        "Stir well to ensure chia seeds don't clump.",
+        "Top with berries.",
+        "Cover and refrigerate overnight (at least 4 hours) before eating."
+      ]
+    },
+    {
+      "id": 37,
+      "name": "Classic Guacamole",
+      "description": "The perfect dip made from ripe avocados.",
+      "search_keys": ["avocado", "lime", "cilantro", "onion", "jalapeno"],
+      "prep_time_min": 10,
+      "cook_time_min": 0,
+      "ingredients": [
+        { "item": "avocados", "quantity": 3, "unit": "ripe" },
+        { "item": "lime", "quantity": 1, "unit": "unit" },
+        { "item": "red onion", "quantity": 0.25, "unit": "unit" },
+        { "item": "fresh cilantro", "quantity": 1, "unit": "handful" },
+        { "item": "salt", "quantity": 0.5, "unit": "tsp" }
+      ],
+      "instructions": [
+        "Cut avocados, remove pits, and scoop flesh into a bowl.",
+        "Mash with a fork to desired chunkiness.",
+        "Stir in lime juice, minced onion, chopped cilantro, and salt.",
+        "Serve immediately with tortilla chips."
+      ]
+    },
+    {
+      "id": 38,
+      "name": "Vegetable Minestrone",
+      "description": "Italian soup packed with veggies, beans, and small pasta.",
+      "search_keys": ["zucchini", "carrots", "beans", "pasta", "tomato broth"],
+      "prep_time_min": 15,
+      "cook_time_min": 30,
+      "ingredients": [
+        { "item": "zucchini", "quantity": 1, "unit": "medium" },
+        { "item": "carrots", "quantity": 2, "unit": "medium" },
+        { "item": "cannellini beans", "quantity": 400, "unit": "g" },
+        { "item": "small pasta", "quantity": 100, "unit": "g" },
+        { "item": "vegetable broth", "quantity": 1, "unit": "liter" },
+        { "item": "canned tomatoes", "quantity": 400, "unit": "g" }
+      ],
+      "instructions": [
+        "Dice zucchini and carrots.",
+        "Sauté veggies in a pot, then add broth and tomatoes.",
+        "Bring to a boil and add the pasta.",
+        "Simmer until pasta is cooked, then stir in the drained beans and heat through."
+      ]
+    },
+    {
+      "id": 39,
+      "name": "Baja Fish Tacos",
+      "description": "White fish tacos with a crunchy cabbage slaw.",
+      "search_keys": ["white fish", "tortillas", "cabbage", "lime", "mayo"],
+      "prep_time_min": 20,
+      "cook_time_min": 10,
+      "ingredients": [
+        { "item": "white fish fillets", "quantity": 400, "unit": "g" },
+        { "item": "corn tortillas", "quantity": 8, "unit": "pieces" },
+        { "item": "purple cabbage", "quantity": 200, "unit": "g" },
+        { "item": "mayonnaise", "quantity": 3, "unit": "tbsp" },
+        { "item": "lime", "quantity": 1, "unit": "unit" },
+        { "item": "flour", "quantity": 50, "unit": "g" }
+      ],
+      "instructions": [
+        "Cut fish into strips, dust with flour and seasoning.",
+        "Pan-fry fish in oil until golden and cooked.",
+        "Shred cabbage and toss with lime juice.",
+        "Assemble tacos with fish, cabbage, and a drizzle of mayo."
+      ]
+    },
+    {
+      "id": 40,
+      "name": "Shrimp Fried Rice",
+      "description": "Savory rice stir-fried with juicy shrimp and peas.",
+      "search_keys": ["shrimp", "rice", "peas", "eggs", "soy sauce"],
+      "prep_time_min": 10,
+      "cook_time_min": 15,
+      "ingredients": [
+        { "item": "cooked rice", "quantity": 400, "unit": "g" },
+        { "item": "raw shrimp", "quantity": 200, "unit": "g" },
+        { "item": "frozen peas", "quantity": 100, "unit": "g" },
+        { "item": "eggs", "quantity": 2, "unit": "large" },
+        { "item": "soy sauce", "quantity": 3, "unit": "tbsp" }
+      ],
+      "instructions": [
+        "Scramble eggs in a wok and remove.",
+        "Cook shrimp until pink, then add peas.",
+        "Add rice and soy sauce, stir-frying on high heat.",
+        "Mix eggs back in and serve hot."
+      ]
+    },
+    {
+      "id": 41,
+      "name": "French Cheese Omelette",
+      "description": "A soft, pale yellow omelette with a creamy interior.",
+      "search_keys": ["eggs", "butter", "cheese", "chives"],
+      "prep_time_min": 5,
+      "cook_time_min": 5,
+      "ingredients": [
+        { "item": "eggs", "quantity": 3, "unit": "large" },
+        { "item": "butter", "quantity": 15, "unit": "g" },
+        { "item": "gruyere cheese", "quantity": 30, "unit": "g" },
+        { "item": "fresh chives", "quantity": 1, "unit": "tbsp" }
+      ],
+      "instructions": [
+        "Whisk eggs vigorously until no whites remain visible.",
+        "Melt butter in a non-stick pan over medium-low heat.",
+        "Pour in eggs and shake pan constantly while stirring with a fork.",
+        "When eggs are set but still moist, add cheese, roll, and serve."
+      ]
+    },
+    {
+      "id": 42,
+      "name": "Easy Apple Crumble",
+      "description": "Baked fruit dessert with a buttery, sugary topping.",
+      "search_keys": ["apples", "flour", "sugar", "butter", "cinnamon"],
+      "prep_time_min": 15,
+      "cook_time_min": 40,
+      "ingredients": [
+        { "item": "apples", "quantity": 4, "unit": "large" },
+        { "item": "flour", "quantity": 150, "unit": "g" },
+        { "item": "sugar", "quantity": 100, "unit": "g" },
+        { "item": "cold butter", "quantity": 100, "unit": "g" },
+        { "item": "cinnamon", "quantity": 1, "unit": "tsp" }
+      ],
+      "instructions": [
+        "Peel and slice apples; place in a baking dish with cinnamon.",
+        "Rub flour, sugar, and cold butter together with fingers until crumbly.",
+        "Sprinkle crumbs over the apples.",
+        "Bake at 190°C (375°F) for 40 minutes until golden."
+      ]
+    },
+    {
+      "id": 43,
+      "name": "Basil Pesto Pasta",
+      "description": "Vibrant green pasta sauce made from fresh herbs.",
+      "search_keys": ["basil", "pine nuts", "parmesan", "garlic", "olive oil"],
+      "prep_time_min": 10,
+      "cook_time_min": 10,
+      "ingredients": [
+        { "item": "fresh basil", "quantity": 2, "unit": "cups" },
+        { "item": "pine nuts", "quantity": 30, "unit": "g" },
+        { "item": "parmesan cheese", "quantity": 50, "unit": "g" },
+        { "item": "olive oil", "quantity": 100, "unit": "ml" },
+        { "item": "pasta", "quantity": 300, "unit": "g" }
+      ],
+      "instructions": [
+        "Blend basil, nuts, cheese, and oil in a food processor until smooth.",
+        "Cook pasta in salted water.",
+        "Drain pasta (reserve some water).",
+        "Toss hot pasta with the fresh pesto, adding water to thin if needed."
+      ]
+    },
+    {
+      "id": 44,
+      "name": "Crispy Pan-Fried Chicken Thighs",
+      "description": "Juicy dark meat with perfectly crisp skin.",
+      "search_keys": ["chicken thighs", "oil", "garlic", "paprika"],
+      "prep_time_min": 5,
+      "cook_time_min": 20,
+      "ingredients": [
+        { "item": "chicken thighs (skin-on)", "quantity": 4, "unit": "pieces" },
+        { "item": "vegetable oil", "quantity": 1, "unit": "tbsp" },
+        { "item": "garlic powder", "quantity": 1, "unit": "tsp" },
+        { "item": "paprika", "quantity": 1, "unit": "tsp" }
+      ],
+      "instructions": [
+        "Pat chicken skin very dry with paper towels.",
+        "Season heavily with salt, pepper, garlic, and paprika.",
+        "Place skin-side down in a cold skillet.",
+        "Turn heat to medium-high and cook undisturbed for 15 minutes until skin is crispy.",
+        "Flip and cook for 5 more minutes."
+      ]
+    },
+    {
+      "id": 45,
+      "name": "Tomato Bruschetta",
+      "description": "Toasted baguette topped with a fresh tomato mixture.",
+      "search_keys": ["baguette", "tomato", "basil", "garlic", "balsamic"],
+      "prep_time_min": 15,
+      "cook_time_min": 5,
+      "ingredients": [
+        { "item": "baguette", "quantity": 1, "unit": "loaf" },
+        { "item": "tomatoes", "quantity": 4, "unit": "diced" },
+        { "item": "fresh basil", "quantity": 1, "unit": "handful" },
+        { "item": "garlic", "quantity": 1, "unit": "clove" },
+        { "item": "olive oil", "quantity": 3, "unit": "tbsp" }
+      ],
+      "instructions": [
+        "Mix diced tomatoes, chopped basil, oil, salt, and pepper.",
+        "Slice baguette and toast until crisp.",
+        "Rub a raw garlic clove over the hot toasted bread.",
+        "Spoon the tomato mixture onto the bread."
+      ]
+    },
+    {
+      "id": 46,
+      "name": "Homemade Hummus",
+      "description": "Smooth chickpea dip, much better than store-bought.",
+      "search_keys": ["chickpeas", "tahini", "lemon", "garlic", "olive oil"],
+      "prep_time_min": 10,
+      "cook_time_min": 0,
+      "ingredients": [
+        { "item": "canned chickpeas", "quantity": 400, "unit": "g" },
+        { "item": "tahini", "quantity": 3, "unit": "tbsp" },
+        { "item": "lemon juice", "quantity": 2, "unit": "tbsp" },
+        { "item": "garlic", "quantity": 1, "unit": "clove" },
+        { "item": "ice water", "quantity": 2, "unit": "tbsp" }
+      ],
+      "instructions": [
+        "Blend tahini and lemon juice until whipped.",
+        "Add chickpeas, garlic, cumin, and salt.",
+        "Blend while slowly adding ice water to make it ultra-smooth.",
+        "Serve with a drizzle of olive oil."
+      ]
+    },
+    {
+      "id": 47,
+      "name": "New England Clam Chowder",
+      "description": "Rich, white creamy soup with clams and potatoes.",
+      "search_keys": ["clams", "potatoes", "cream", "bacon", "celery"],
+      "prep_time_min": 15,
+      "cook_time_min": 30,
+      "ingredients": [
+        { "item": "canned clams", "quantity": 300, "unit": "g" },
+        { "item": "potatoes", "quantity": 3, "unit": "medium" },
+        { "item": "bacon", "quantity": 3, "unit": "strips" },
+        { "item": "heavy cream", "quantity": 200, "unit": "ml" },
+        { "item": "onion", "quantity": 1, "unit": "small" }
+      ],
+      "instructions": [
+        "Fry bacon pieces until crisp, remove, cooked onion in fat.",
+        "Add diced potatoes and juice from clam cans (add water to cover).",
+        "Simmer until potatoes are tender.",
+        "Stir in cream and clams, heating gently (do not boil). Top with bacon."
+      ]
+    },
+    {
+      "id": 48,
+      "name": "Classic Cobb Salad",
+      "description": "A composed salad with rows of ingredients.",
+      "search_keys": ["chicken", "bacon", "eggs", "avocado", "blue cheese"],
+      "prep_time_min": 20,
+      "cook_time_min": 0,
+      "ingredients": [
+        { "item": "romaine lettuce", "quantity": 1, "unit": "head" },
+        { "item": "cooked chicken", "quantity": 200, "unit": "g" },
+        { "item": "bacon", "quantity": 3, "unit": "strips" },
+        { "item": "boiled eggs", "quantity": 2, "unit": "unit" },
+        { "item": "avocado", "quantity": 1, "unit": "unit" },
+        { "item": "blue cheese", "quantity": 50, "unit": "g" }
+      ],
+      "instructions": [
+        "Chop lettuce and place on a large platter.",
+        "Arrange diced chicken, bacon, eggs, avocado, and cheese in neat rows on top.",
+        "Serve with red wine vinaigrette on the side."
+      ]
+    },
+    {
+      "id": 49,
+      "name": "Mixed Berry Smoothie",
+      "description": "Refreshing drink packed with antioxidants.",
+      "search_keys": ["berries", "banana", "yogurt", "milk", "honey"],
+      "prep_time_min": 5,
+      "cook_time_min": 0,
+      "ingredients": [
+        { "item": "frozen berries", "quantity": 150, "unit": "g" },
+        { "item": "banana", "quantity": 1, "unit": "unit" },
+        { "item": "greek yogurt", "quantity": 100, "unit": "g" },
+        { "item": "milk", "quantity": 150, "unit": "ml" },
+        { "item": "honey", "quantity": 1, "unit": "tsp" }
+      ],
+      "instructions": [
+        "Place all ingredients in a blender.",
+        "Blend on high until smooth and purple.",
+        "Add more milk if it is too thick to drink."
+      ]
+    },
+    {
+      "id": 50,
+      "name": "Stovetop Macaroni and Cheese",
+      "description": "Creamy, cheesy pasta made from scratch without baking.",
+      "search_keys": ["macaroni", "cheddar", "milk", "butter", "flour"],
+      "prep_time_min": 10,
+      "cook_time_min": 15,
+      "ingredients": [
+        { "item": "elbow macaroni", "quantity": 250, "unit": "g" },
+        { "item": "sharp cheddar cheese", "quantity": 200, "unit": "g" },
+        { "item": "milk", "quantity": 250, "unit": "ml" },
+        { "item": "butter", "quantity": 30, "unit": "g" },
+        { "item": "flour", "quantity": 2, "unit": "tbsp" }
+      ],
+      "instructions": [
+        "Cook macaroni; drain and set aside.",
+        "Melt butter in the pot, whisk in flour, then slowly whisk in milk.",
+        "Simmer until sauce thickens.",
+        "Remove from heat, stir in cheese until melted, then mix in the pasta."
+      ]
     }
   ]
 }
