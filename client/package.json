@@ -13,6 +13,7 @@
     "electron:dev": "concurrently -k \"npm run dev\" \"wait-on tcp:5173 && npm run electron\""
   },
   "dependencies": {
+    "env": "^0.0.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "recharts": "^3.5.1"

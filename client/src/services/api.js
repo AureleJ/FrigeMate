@@ -8,10 +8,12 @@ class ApiService {
 
     async request(endpoint, options = {}) {
         const url = `${this.baseURL}${endpoint}`;
+        console.log(`API Request to: ${url}`);
         
         const defaultOptions = {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'x-api-key': config.API_KEY
             }
         };
 
