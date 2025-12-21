@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require("body-parser");
 const cors = require('cors');
+const path = require('path');
 
 const userRoutes = require('./routes/users');
 const recipeRoutes = require('./routes/recipes');
@@ -10,6 +11,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors());
+
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
 
 const checkApiKey = (req, res, next) => {
     const serverApiKey = process.env.API_KEY; 
