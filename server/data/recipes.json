@@ -1,0 +1,788 @@
+{
+  "recipes": [
+    {
+      "id": 1,
+      "name": "Classic Shepherd's Pie",
+      "description": "A hearty, comforting layer of savory minced meat and vegetables topped with creamy mashed potatoes.",
+      "search_keys": [
+        "ground beef",
+        "potatoes",
+        "onions",
+        "carrots",
+        "peas",
+        "milk",
+        "butter"
+      ],
+      "prep_time_min": 20,
+      "cook_time_min": 40,
+      "ingredients": [
+        {
+          "item": "ground beef",
+          "quantity": 500,
+          "unit": "g"
+        },
+        {
+          "item": "potatoes",
+          "quantity": 800,
+          "unit": "g"
+        },
+        {
+          "item": "onion",
+          "quantity": 1,
+          "unit": "large"
+        },
+        {
+          "item": "carrots",
+          "quantity": 2,
+          "unit": "medium"
+        },
+        {
+          "item": "frozen peas",
+          "quantity": 100,
+          "unit": "g"
+        },
+        {
+          "item": "butter",
+          "quantity": 50,
+          "unit": "g"
+        },
+        {
+          "item": "milk",
+          "quantity": 100,
+          "unit": "ml"
+        },
+        {
+          "item": "beef broth",
+          "quantity": 250,
+          "unit": "ml"
+        }
+      ],
+      "instructions": [
+        "Peel and boil potatoes in salted water until tender, then mash with butter and milk until smooth.",
+        "In a large pan, brown the ground beef over medium heat and drain excess fat.",
+        "Add finely chopped onions and diced carrots to the beef, cooking until softened (about 8 minutes).",
+        "Stir in the beef broth and peas, simmering for 10 minutes until the sauce thickens slightly.",
+        "Transfer the meat mixture to a baking dish and spread the mashed potatoes evenly over the top.",
+        "Bake at 200°C (400°F) for 20 minutes or until the potato peaks are golden brown."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "One-Pot Creamy Chicken Pasta",
+      "description": "A rich and silky pasta dish where everything cooks in one pan for maximum flavor and minimum cleanup.",
+      "search_keys": [
+        "chicken",
+        "pasta",
+        "garlic",
+        "cream",
+        "parmesan",
+        "spinach"
+      ],
+      "prep_time_min": 15,
+      "cook_time_min": 25,
+      "ingredients": [
+        {
+          "item": "chicken breast",
+          "quantity": 2,
+          "unit": "pieces"
+        },
+        {
+          "item": "penne pasta",
+          "quantity": 300,
+          "unit": "g"
+        },
+        {
+          "item": "garlic",
+          "quantity": 3,
+          "unit": "cloves"
+        },
+        {
+          "item": "heavy cream",
+          "quantity": 200,
+          "unit": "ml"
+        },
+        {
+          "item": "chicken broth",
+          "quantity": 500,
+          "unit": "ml"
+        },
+        {
+          "item": "cheese",
+          "quantity": 50,
+          "unit": "g"
+        },
+        {
+          "item": "fresh spinach",
+          "quantity": 2,
+          "unit": "handfuls"
+        }
+      ],
+      "instructions": [
+        "Cut chicken into bite-sized pieces and sear in a large pot with oil until golden; remove and set aside.",
+        "In the same pot, sauté minced garlic for 1 minute until fragrant.",
+        "Add the dry pasta, chicken broth, and heavy cream to the pot.",
+        "Bring to a boil, then reduce heat to a simmer, stirring frequently to prevent sticking, for about 10-12 minutes.",
+        "Once pasta is cooked and sauce has thickened, stir in the cooked chicken, spinach, and parmesan.",
+        "Continue stirring until the spinach has wilted and the sauce is glossy."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Slow-Roasted Root Vegetable Medley",
+      "description": "An aromatic and healthy vegetarian dish featuring caramelized common vegetables.",
+      "search_keys": [
+        "potatoes",
+        "carrots",
+        "onion",
+        "garlic",
+        "olive oil",
+        "thyme"
+      ],
+      "prep_time_min": 15,
+      "cook_time_min": 45,
+      "ingredients": [
+        {
+          "item": "potatoes",
+          "quantity": 500,
+          "unit": "g"
+        },
+        {
+          "item": "carrots",
+          "quantity": 300,
+          "unit": "g"
+        },
+        {
+          "item": "red onion",
+          "quantity": 2,
+          "unit": "medium"
+        },
+        {
+          "item": "garlic bulb",
+          "quantity": 1,
+          "unit": "unit"
+        },
+        {
+          "item": "olive oil",
+          "quantity": 60,
+          "unit": "ml"
+        },
+        {
+          "item": "dried thyme",
+          "quantity": 1,
+          "unit": "tsp"
+        }
+      ],
+      "instructions": [
+        "Preheat your oven to 210°C (410°F).",
+        "Cut potatoes and carrots into uniform 2cm chunks to ensure even cooking.",
+        "Quarter the onions and break the garlic bulb into individual unpeeled cloves.",
+        "Toss all vegetables in a large bowl with olive oil, salt, pepper, and thyme.",
+        "Spread in a single layer on a large baking sheet, ensuring they aren't crowded.",
+        "Roast for 45 minutes, turning the vegetables halfway through until they are charred and tender."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Homemade Fluffy Pancakes with Fruit Compote",
+      "description": "Thick, diner-style pancakes made from scratch with a quick warm fruit topping.",
+      "search_keys": [
+        "flour",
+        "eggs",
+        "milk",
+        "sugar",
+        "butter",
+        "frozen berries"
+      ],
+      "prep_time_min": 10,
+      "cook_time_min": 15,
+      "ingredients": [
+        {
+          "item": "all-purpose flour",
+          "quantity": 250,
+          "unit": "g"
+        },
+        {
+          "item": "milk",
+          "quantity": 300,
+          "unit": "ml"
+        },
+        {
+          "item": "egg",
+          "quantity": 2,
+          "unit": "large"
+        },
+        {
+          "item": "melted butter",
+          "quantity": 50,
+          "unit": "g"
+        },
+        {
+          "item": "baking powder",
+          "quantity": 2,
+          "unit": "tsp"
+        },
+        {
+          "item": "frozen berries",
+          "quantity": 150,
+          "unit": "g"
+        },
+        {
+          "item": "sugar",
+          "quantity": 30,
+          "unit": "g"
+        }
+      ],
+      "instructions": [
+        "In a small saucepan, combine frozen berries and half the sugar; simmer over low heat until syrupy.",
+        "In a large bowl, whisk together flour, remaining sugar, and baking powder.",
+        "In a separate jug, mix the milk, eggs, and melted butter.",
+        "Pour the wet ingredients into the dry ingredients and whisk gently (lumps are okay!).",
+        "Heat a non-stick pan over medium heat and pour small ladles of batter.",
+        "Flip when bubbles appear on the surface and cook until golden on both sides; serve with the warm compote."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Hearty Lentil and Vegetable Soup",
+      "description": "A protein-packed soup that stores well and uses everyday pantry staples.",
+      "search_keys": [
+        "lentils",
+        "carrots",
+        "celery",
+        "onion",
+        "canned tomatoes",
+        "broth"
+      ],
+      "prep_time_min": 10,
+      "cook_time_min": 35,
+      "ingredients": [
+        {
+          "item": "dry lentils",
+          "quantity": 200,
+          "unit": "g"
+        },
+        {
+          "item": "onion",
+          "quantity": 1,
+          "unit": "unit"
+        },
+        {
+          "item": "carrots",
+          "quantity": 2,
+          "unit": "unit"
+        },
+        {
+          "item": "celery stalks",
+          "quantity": 2,
+          "unit": "unit"
+        },
+        {
+          "item": "canned diced tomatoes",
+          "quantity": 400,
+          "unit": "g"
+        },
+        {
+          "item": "vegetable broth",
+          "quantity": 1,
+          "unit": "liter"
+        },
+        {
+          "item": "garlic",
+          "quantity": 2,
+          "unit": "cloves"
+        }
+      ],
+      "instructions": [
+        "Finely dice the onion, carrots, and celery (the 'soffritto' base).",
+        "Sauté the vegetables in a large pot with a splash of oil until softened.",
+        "Add minced garlic and dry lentils, stirring for 2 minutes to toast the lentils slightly.",
+        "Pour in the canned tomatoes and vegetable broth.",
+        "Bring to a boil, then reduce heat and simmer partially covered for 30 minutes.",
+        "Season generously with salt and pepper; blend a small portion of the soup if you prefer a creamier texture."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Classic Spaghetti Carbonara",
+      "description": "A traditional Roman pasta dish made with eggs, cheese, and cured pork. Creamy without using actual cream.",
+      "search_keys": [
+        "pasta",
+        "eggs",
+        "cheese",
+        "bacon",
+        "garlic",
+        "black pepper"
+      ],
+      "prep_time_min": 10,
+      "cook_time_min": 15,
+      "ingredients": [
+        {
+          "item": "spaghetti",
+          "quantity": 400,
+          "unit": "g"
+        },
+        {
+          "item": "eggs",
+          "quantity": 3,
+          "unit": "large"
+        },
+        {
+          "item": "cheese",
+          "quantity": 50,
+          "unit": "g"
+        },
+        {
+          "item": "bacon",
+          "quantity": 150,
+          "unit": "g"
+        },
+        {
+          "item": "garlic",
+          "quantity": 2,
+          "unit": "cloves"
+        }
+      ],
+      "instructions": [
+        "Boil a large pot of salted water and cook spaghetti until al dente.",
+        "While pasta cooks, fry diced bacon in a pan until crispy. Add minced garlic for the last minute.",
+        "In a small bowl, whisk the eggs and grated cheese together.",
+        "Reserve half a cup of pasta water, then drain the spaghetti.",
+        "Move the pan with bacon away from the heat. Toss in the hot pasta.",
+        "Quickly pour in the egg mixture and stir vigorously. The residual heat will create a creamy sauce without scrambling the eggs. Add pasta water if too thick."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Honey Garlic Chicken Stir-Fry",
+      "description": "A sweet and savory chicken dish packed with vegetables and served over rice.",
+      "search_keys": [
+        "chicken",
+        "soy sauce",
+        "honey",
+        "garlic",
+        "broccoli",
+        "carrots",
+        "rice"
+      ],
+      "prep_time_min": 15,
+      "cook_time_min": 15,
+      "ingredients": [
+        {
+          "item": "chicken breast",
+          "quantity": 500,
+          "unit": "g"
+        },
+        {
+          "item": "broccoli",
+          "quantity": 1,
+          "unit": "head"
+        },
+        {
+          "item": "carrots",
+          "quantity": 2,
+          "unit": "large"
+        },
+        {
+          "item": "soy sauce",
+          "quantity": 4,
+          "unit": "tbsp"
+        },
+        {
+          "item": "honey",
+          "quantity": 3,
+          "unit": "tbsp"
+        },
+        {
+          "item": "rice",
+          "quantity": 300,
+          "unit": "g"
+        }
+      ],
+      "instructions": [
+        "Cook rice according to package instructions.",
+        "In a bowl, mix soy sauce, honey, and minced garlic to make the sauce.",
+        "Cut chicken into bite-sized pieces and sauté in a wok or large pan until browned.",
+        "Add sliced carrots and broccoli florets with a splash of water; cover and steam for 3 minutes.",
+        "Pour the sauce over everything and simmer for 2-3 minutes until the glaze thickens and coats the chicken."
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Quick Ground Beef Tacos",
+      "description": "Family-favorite Tex-Mex dinner that's ready in under 20 minutes.",
+      "search_keys": [
+        "ground beef",
+        "onion",
+        "lettuce",
+        "cheese",
+        "tortillas",
+        "tomato"
+      ],
+      "prep_time_min": 10,
+      "cook_time_min": 10,
+      "ingredients": [
+        {
+          "item": "ground beef",
+          "quantity": 500,
+          "unit": "g"
+        },
+        {
+          "item": "onion",
+          "quantity": 1,
+          "unit": "small"
+        },
+        {
+          "item": "tortillas",
+          "quantity": 8,
+          "unit": "pieces"
+        },
+        {
+          "item": "cheese",
+          "quantity": 100,
+          "unit": "g"
+        },
+        {
+          "item": "lettuce",
+          "quantity": 1,
+          "unit": "head"
+        }
+      ],
+      "instructions": [
+        "Brown the ground beef with diced onions in a skillet until fully cooked.",
+        "Season with salt, pepper, and a bit of chili powder or cumin if available.",
+        "Warm the tortillas in a dry pan or microwave.",
+        "Assemble tacos by layering beef, shredded lettuce, diced tomatoes, and grated cheese."
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Mediterranean Chickpea Salad",
+      "description": "A refreshing, protein-rich vegetarian salad perfect for lunch or a side dish.",
+      "search_keys": [
+        "chickpeas",
+        "cucumber",
+        "tomato",
+        "onion",
+        "olive oil",
+        "lemon"
+      ],
+      "prep_time_min": 15,
+      "cook_time_min": 0,
+      "ingredients": [
+        {
+          "item": "canned chickpeas",
+          "quantity": 400,
+          "unit": "g"
+        },
+        {
+          "item": "cucumber",
+          "quantity": 1,
+          "unit": "large"
+        },
+        {
+          "item": "tomato",
+          "quantity": 3,
+          "unit": "medium"
+        },
+        {
+          "item": "red onion",
+          "quantity": 0.5,
+          "unit": "unit"
+        },
+        {
+          "item": "olive oil",
+          "quantity": 3,
+          "unit": "tbsp"
+        },
+        {
+          "item": "lemon",
+          "quantity": 1,
+          "unit": "unit"
+        }
+      ],
+      "instructions": [
+        "Rinse and drain the chickpeas thoroughly.",
+        "Dice the cucumber, tomatoes, and red onion into small, even pieces.",
+        "In a large bowl, whisk together olive oil, lemon juice, salt, and pepper.",
+        "Add vegetables and chickpeas to the bowl and toss well to coat.",
+        "Let it sit for 10 minutes before serving to let the flavors meld."
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Loaded Baked Potatoes",
+      "description": "Crispy potato skins with a fluffy interior, topped with classic comfort ingredients.",
+      "search_keys": [
+        "potatoes",
+        "bacon",
+        "cheese",
+        "sour cream",
+        "butter"
+      ],
+      "prep_time_min": 5,
+      "cook_time_min": 60,
+      "ingredients": [
+        {
+          "item": "potatoes",
+          "quantity": 4,
+          "unit": "large"
+        },
+        {
+          "item": "bacon",
+          "quantity": 4,
+          "unit": "strips"
+        },
+        {
+          "item": "cheese",
+          "quantity": 80,
+          "unit": "g"
+        },
+        {
+          "item": "sour cream",
+          "quantity": 100,
+          "unit": "g"
+        },
+        {
+          "item": "butter",
+          "quantity": 30,
+          "unit": "g"
+        }
+      ],
+      "instructions": [
+        "Prick potatoes with a fork and bake at 200°C (400°F) for 1 hour until soft inside.",
+        "Fry bacon until crispy, then crumble into small bits.",
+        "Slice the top of each potato, fluff the inside with a fork, and stir in a pat of butter.",
+        "Top with grated cheese while hot so it melts, then add sour cream and bacon bits."
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Creamy Tomato Basil Soup",
+      "description": "Better than the canned version! A smooth, warm soup made from pantry staples.",
+      "search_keys": [
+        "canned tomatoes",
+        "onion",
+        "garlic",
+        "cream",
+        "broth",
+        "butter"
+      ],
+      "prep_time_min": 5,
+      "cook_time_min": 25,
+      "ingredients": [
+        {
+          "item": "canned diced tomatoes",
+          "quantity": 800,
+          "unit": "g"
+        },
+        {
+          "item": "onion",
+          "quantity": 1,
+          "unit": "unit"
+        },
+        {
+          "item": "garlic",
+          "quantity": 2,
+          "unit": "cloves"
+        },
+        {
+          "item": "vegetable broth",
+          "quantity": 500,
+          "unit": "ml"
+        },
+        {
+          "item": "heavy cream",
+          "quantity": 100,
+          "unit": "ml"
+        }
+      ],
+      "instructions": [
+        "Sauté chopped onion and garlic in butter until soft.",
+        "Add canned tomatoes and broth; bring to a simmer for 15 minutes.",
+        "Use a blender to process the soup until completely smooth.",
+        "Stir in the heavy cream and season with salt and pepper to taste."
+      ]
+    },
+    {
+      "id": 12,
+      "name": "French Toast with Caramelized Apples",
+      "description": "A decadent breakfast using stale bread and common fruit.",
+      "search_keys": [
+        "bread",
+        "eggs",
+        "milk",
+        "apples",
+        "sugar",
+        "cinnamon"
+      ],
+      "prep_time_min": 10,
+      "cook_time_min": 15,
+      "ingredients": [
+        {
+          "item": "bread",
+          "quantity": 4,
+          "unit": "thick slices"
+        },
+        {
+          "item": "eggs",
+          "quantity": 2,
+          "unit": "unit"
+        },
+        {
+          "item": "milk",
+          "quantity": 150,
+          "unit": "ml"
+        },
+        {
+          "item": "apples",
+          "quantity": 2,
+          "unit": "unit"
+        },
+        {
+          "item": "sugar",
+          "quantity": 2,
+          "unit": "tbsp"
+        }
+      ],
+      "instructions": [
+        "Whisk eggs, milk, and a pinch of cinnamon in a dish. Soak bread slices for 1 minute per side.",
+        "Peel and slice apples. Sauté them in a pan with butter and sugar until brown and soft.",
+        "In another pan, fry the soaked bread until golden brown on both sides.",
+        "Serve the toast topped with the warm caramelized apples."
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Garlic Butter Shrimp Pasta",
+      "description": "Elegant, restaurant-quality seafood pasta that takes very little effort.",
+      "search_keys": [
+        "shrimp",
+        "pasta",
+        "garlic",
+        "butter",
+        "lemon",
+        "parsley"
+      ],
+      "prep_time_min": 10,
+      "cook_time_min": 12,
+      "ingredients": [
+        {
+          "item": "shrimp",
+          "quantity": 300,
+          "unit": "g"
+        },
+        {
+          "item": "spaghetti",
+          "quantity": 250,
+          "unit": "g"
+        },
+        {
+          "item": "butter",
+          "quantity": 60,
+          "unit": "g"
+        },
+        {
+          "item": "garlic",
+          "quantity": 4,
+          "unit": "cloves"
+        },
+        {
+          "item": "lemon",
+          "quantity": 0.5,
+          "unit": "unit"
+        }
+      ],
+      "instructions": [
+        "Cook pasta in salted water.",
+        "Melt butter in a pan and cook minced garlic for 1 minute.",
+        "Add shrimp and cook until pink (about 2-3 minutes).",
+        "Toss the drained pasta into the pan with shrimp, lemon juice, and a splash of pasta water.",
+        "Mix well and serve immediately."
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Tuna Salad Sandwiches",
+      "description": "The ultimate quick lunch using canned tuna and common condiments.",
+      "search_keys": [
+        "canned tuna",
+        "mayonnaise",
+        "bread",
+        "onion",
+        "celery"
+      ],
+      "prep_time_min": 10,
+      "cook_time_min": 0,
+      "ingredients": [
+        {
+          "item": "canned tuna",
+          "quantity": 2,
+          "unit": "cans"
+        },
+        {
+          "item": "mayonnaise",
+          "quantity": 3,
+          "unit": "tbsp"
+        },
+        {
+          "item": "onion",
+          "quantity": 0.25,
+          "unit": "unit"
+        },
+        {
+          "item": "bread",
+          "quantity": 4,
+          "unit": "slices"
+        }
+      ],
+      "instructions": [
+        "Drain the tuna and place it in a bowl.",
+        "Mix with mayonnaise and very finely diced onions.",
+        "Toast your bread if desired.",
+        "Spread the mixture thickly on the bread and add lettuce or tomato if you have them."
+      ]
+    },
+    {
+      "id": 15,
+      "name": "One-Pan Roasted Chicken & Potatoes",
+      "description": "A complete meal cooked on a single tray for easy cleanup.",
+      "search_keys": [
+        "chicken thighs",
+        "potatoes",
+        "garlic",
+        "olive oil",
+        "rosemary"
+      ],
+      "prep_time_min": 10,
+      "cook_time_min": 45,
+      "ingredients": [
+        {
+          "item": "chicken thighs",
+          "quantity": 4,
+          "unit": "pieces"
+        },
+        {
+          "item": "potatoes",
+          "quantity": 500,
+          "unit": "g"
+        },
+        {
+          "item": "garlic",
+          "quantity": 4,
+          "unit": "cloves"
+        },
+        {
+          "item": "olive oil",
+          "quantity": 3,
+          "unit": "tbsp"
+        }
+      ],
+      "instructions": [
+        "Preheat oven to 200°C (400°F).",
+        "Cut potatoes into small cubes and place on a baking sheet with the chicken.",
+        "Drizzle with oil, add smashed garlic cloves, salt, and pepper. Toss to coat.",
+        "Roast for 40-45 minutes until chicken skin is crispy and potatoes are golden."
+      ]
+    }
+  ]
+}
