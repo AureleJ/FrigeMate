@@ -1,3 +1,4 @@
+//RecipeSection.kt
 package com.example.fridgemate
 
 import androidx.activity.compose.BackHandler
@@ -34,33 +35,39 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.layout.ContentScale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipeScreen(userId: String) { // On ajoute userId pour récupérer le frigo
+fun RecipeScreen(userId: String) {
     val recipeViewModel: RecipeViewModel = viewModel()
     val dashboardViewModel: DashboardViewModel = viewModel()
 
     // États
     var selectedRecipe by remember { mutableStateOf<RecipeData?>(null) }
     val dashboardState = dashboardViewModel.uiState
+
+    // On garde matchingRecipes pour l'affichage
     val matchingRecipes = recipeViewModel.matchingRecipes
+
+    // Variable pour éviter de recharger en boucle à chaque petit changement
+    var dataLoaded by remember { mutableStateOf(false) }
 
     // 1. Charger les ingrédients du frigo
     LaunchedEffect(userId) {
         dashboardViewModel.loadData(userId)
     }
 
-    // 2. Dès que le frigo est chargé, on calcule les recettes compatibles
+    // 2. MODIFICATION ICI : Dès que le frigo est chargé, on cherche les recettes
     LaunchedEffect(dashboardState) {
-        if (dashboardState is DashboardUiState.Success) {
-            recipeViewModel.updateMatchingRecipes(dashboardState.ingredients)
+        if (!dataLoaded && dashboardState is DashboardUiState.Success) {
+            // On envoie les ingrédients du frigo au ViewModel des recettes
+            recipeViewModel.loadRecipesFromFridge(dashboardState.ingredients)
+            dataLoaded = true
         }
-    }
-
-    // Gestion Retour
-    BackHandler(enabled = selectedRecipe != null) {
-        selectedRecipe = null
     }
 
     Scaffold(
@@ -250,10 +257,22 @@ fun RecipeCardItem(recipe: RecipeData, onClick: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp)
-                    .background(WebBg), // Gris clair
+                    .background(WebBg),
                 contentAlignment = Alignment.Center
             ) {
-                // Ici tu mettras ton AsyncImage
+                if (!recipe.imageUrl.isNullOrEmpty()) {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(recipe.imageUrl)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    Icon(Icons.Default.Timer, contentDescription = null, tint = WebTextGray) // Icone par defaut
+                }
             }
 
             Column(modifier = Modifier.padding(12.dp)) {
@@ -320,12 +339,26 @@ fun RecipeDetailView(recipe: RecipeData, onBack: () -> Unit) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(300.dp) // J'ai légèrement agrandi pour l'effet immersif
+                        .height(300.dp)
                         .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
-                        .background(Color.LightGray),
-                    contentAlignment = Alignment.Center
+                        .background(Color.LightGray) // Couleur de fond pendant le chargement
                 ) {
-                    Text("Tasty Image Here", color = Color.Gray)
+                    if (!recipe.imageUrl.isNullOrEmpty()) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(recipe.imageUrl)
+                                .crossfade(true)
+                                .build(),
+                            contentDescription = recipe.title,
+                            contentScale = ContentScale.Crop, // Important pour remplir la zone
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    } else {
+                        // Fallback si pas d'image
+                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            Text("No Image", color = Color.Gray)
+                        }
+                    }
                 }
 
                 // Le reste du contenu (Titre, ingrédients...)
