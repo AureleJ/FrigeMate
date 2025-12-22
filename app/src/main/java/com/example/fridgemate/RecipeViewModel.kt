@@ -16,14 +16,14 @@ enum class RecipeFilter { ALL, FAST, VEGGIE, FRIDGE }
 
 class RecipeViewModel : ViewModel() {
 
-    // Cache de toutes les recettes chargées
     private var allRecipesCache = listOf<RecipeData>()
 
-    // Liste affichée à l'écran (après filtres)
+    // MÉMOIRE DU FRIGO : On garde les ingrédients ici pour les calculs futurs
+    private var storedIngredients: List<IngredientData> = emptyList()
+
     var visibleRecipes by mutableStateOf<List<RecipeData>>(emptyList())
         private set
 
-    // Liste spécifique pour le filtre "Fridge" (Classée par pertinence)
     var matchingRecipes = mutableStateListOf<RecipeData>()
         private set
 
@@ -39,53 +39,46 @@ class RecipeViewModel : ViewModel() {
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
-    // Fonction principale appelée par l'UI quand le frigo est chargé
+    // 1. CHARGEMENT INITIAL VIA LE FRIGO
     fun loadRecipesFromFridge(fridgeIngredients: List<IngredientData>) {
+        // On sauvegarde le frigo pour plus tard
+        storedIngredients = fridgeIngredients
+
         viewModelScope.launch {
             isLoading = true
             errorMessage = null
 
-            // 1. Si frigo vide, on propose un fallback (ex: Pasta)
             if (fridgeIngredients.isEmpty()) {
                 searchRecipes("Pasta")
                 return@launch
             }
 
             try {
-                // 2. RECHERCHE PARALLÈLE SUR TOUS LES INGRÉDIENTS
-                // On lance une requête API pour chaque ingrédient du frigo.
-                // async permet de les lancer toutes en même temps sans attendre les unes après les autres.
-                val uniqueIngredients = fridgeIngredients.distinctBy { it.name } // Évite de chercher 2x "Tomate"
-
+                // Recherche parallèle sur tous les ingrédients
+                val uniqueIngredients = fridgeIngredients.distinctBy { it.name }
                 val deferredResults = uniqueIngredients.map { ingredient ->
                     async(Dispatchers.IO) {
                         try {
-                            // On cherche les plats qui contiennent le nom de l'ingrédient (ex: "Chicken")
                             val response = TheMealDbClient.apiService.searchMeals(ingredient.name)
                             response.meals?.map { it.toDomainModel() } ?: emptyList()
                         } catch (e: Exception) {
-                            // Si une requête échoue (ex: ingrédient bizarre), on l'ignore silencieusement
                             emptyList<RecipeData>()
                         }
                     }
                 }
 
-                // 3. AGGRÉGATION DES RÉSULTATS
-                // On attend que tout soit fini
                 val resultsList = deferredResults.awaitAll()
-
-                // On met tout à plat dans une seule liste et on enlève les doublons (par ID)
                 val combinedRecipes = resultsList.flatten().distinctBy { it.id }
 
-                // Mise à jour du cache global avec ces recettes
+                // IMPORTANT : On calcule les scores AVANT de mettre en cache
+                calculateScores(combinedRecipes)
+
                 allRecipesCache = combinedRecipes
 
-                // 4. CALCUL DE PERTINENCE & TRI
-                // C'est ici qu'on va trier pour mettre en premier celles qui utilisent le plus d'ingrédients
-                updateMatchingRecipes(fridgeIngredients)
+                // On met à jour la liste "Cook with what you have" (triée par score)
+                updateMatchingRecipesList()
 
-                // 5. ACTIVATION DU FILTRE AUTOMATIQUE
-                // On active le filtre FRIDGE pour n'afficher que les recettes pertinentes
+                // On active le filtre
                 onFilterSelected(RecipeFilter.FRIDGE)
 
             } catch (e: Exception) {
@@ -97,7 +90,7 @@ class RecipeViewModel : ViewModel() {
         }
     }
 
-    // Recherche manuelle via la barre de recherche
+    // 2. RECHERCHE MANUELLE
     fun searchRecipes(query: String = "") {
         viewModelScope.launch {
             isLoading = true
@@ -107,9 +100,13 @@ class RecipeViewModel : ViewModel() {
                     TheMealDbClient.apiService.searchMeals(query)
                 }
                 val meals = response.meals ?: emptyList()
-                allRecipesCache = meals.map { it.toDomainModel() }
+                val domainMeals = meals.map { it.toDomainModel() }
 
-                // Si recherche manuelle, on repasse en mode ALL pour voir les résultats de la recherche
+                // ICI LE FIX : On recalcule les scores immédiatement avec le frigo en mémoire
+                calculateScores(domainMeals)
+
+                allRecipesCache = domainMeals
+
                 if (selectedFilter == RecipeFilter.FRIDGE) {
                     selectedFilter = RecipeFilter.ALL
                 }
@@ -124,14 +121,42 @@ class RecipeViewModel : ViewModel() {
         }
     }
 
+    // --- NOUVELLE FONCTION DÉDIÉE AU CALCUL ---
+    private fun calculateScores(recipes: List<RecipeData>) {
+        if (storedIngredients.isEmpty()) return
+
+        recipes.forEach { recipe ->
+            // Combien on en a ?
+            val currentMatchCount = recipe.ingredients?.count { recipeIng ->
+                storedIngredients.any { userIng ->
+                    val rName = recipeIng.name ?: ""
+                    val uName = userIng.name
+                    rName.contains(uName, ignoreCase = true) || uName.contains(rName, ignoreCase = true)
+                }
+            } ?: 0
+
+            // Combien il en manque ?
+            val totalIngredients = recipe.ingredients?.size ?: 0
+            val currentMissingCount = if (totalIngredients > currentMatchCount) totalIngredients - currentMatchCount else 0
+
+            recipe.matchingCount = currentMatchCount
+            recipe.missingCount = currentMissingCount
+        }
+    }
+
+    // Mise à jour de la liste spécifique "Cook with what you have"
+    private fun updateMatchingRecipesList() {
+        val sorted = allRecipesCache
+            .filter { it.matchingCount > 0 }
+            .sortedByDescending { it.matchingCount }
+
+        matchingRecipes.clear()
+        matchingRecipes.addAll(sorted)
+    }
+
     fun onSearchQueryChange(query: String) {
         searchQuery = query
-        // Recherche API si plus de 2 lettres, sinon filtrage local
-        if (query.length > 2) {
-            searchRecipes(query)
-        } else {
-            applyFilters()
-        }
+        if (query.length > 2) searchRecipes(query) else applyFilters()
     }
 
     fun onFilterSelected(filter: RecipeFilter) {
@@ -142,66 +167,18 @@ class RecipeViewModel : ViewModel() {
     private fun applyFilters() {
         var result = allRecipesCache
 
-        // 1. Filtre par Texte
         if (searchQuery.isNotBlank() && result.size > 1) {
             result = result.filter { recipe ->
                 recipe.title.contains(searchQuery, ignoreCase = true)
             }
         }
 
-        // 2. Filtres Catégories
         result = when (selectedFilter) {
             RecipeFilter.ALL -> result
             RecipeFilter.FAST -> result.filter { it.duration <= 30 }
-            RecipeFilter.VEGGIE -> result.filter {
-                it.description?.contains("Vegetarian", true) == true ||
-                        it.ingredients?.any { ing -> ing.name?.contains("Vegetable", true) == true } == true
-            }
-            RecipeFilter.FRIDGE -> {
-                // Ici on affiche la liste déjà triée par pertinence
-                if (matchingRecipes.isNotEmpty()) matchingRecipes else emptyList()
-            }
+            RecipeFilter.VEGGIE -> result.filter { it.isVegetarian }
+            RecipeFilter.FRIDGE -> if (matchingRecipes.isNotEmpty()) matchingRecipes else emptyList()
         }
         visibleRecipes = result
-    }
-
-    // --- CŒUR DU SYSTÈME DE RECOMMANDATION ---
-    fun updateMatchingRecipes(userIngredients: List<IngredientData>) {
-        val all = allRecipesCache
-
-        if (all.isEmpty() || userIngredients.isEmpty()) {
-            matchingRecipes.clear()
-            return
-        }
-
-        // On calcule un score pour chaque recette
-        val sorted = all.map { recipe ->
-            // Score = Nombre d'ingrédients de la recette présents dans ton frigo
-            val matchCount = recipe.ingredients?.count { recipeIng ->
-                userIngredients.any { userIng ->
-                    // Comparaison souple ("Tomato" matche "Tomatoes")
-                    val rName = recipeIng.name ?: ""
-                    val uName = userIng.name
-
-                    rName.contains(uName, ignoreCase = true) || uName.contains(rName, ignoreCase = true)
-                }
-            } ?: 0
-
-            // On retourne la recette avec son score
-            Pair(recipe, matchCount)
-        }
-            // On ne garde que celles qui ont au moins 1 ingrédient en commun
-            .filter { it.second > 0 }
-            // TRI CRUCIAL : Les plus gros scores d'abord !
-            .sortedByDescending { it.second }
-            .map { it.first }
-
-        matchingRecipes.clear()
-        matchingRecipes.addAll(sorted)
-
-        // Si on est déjà sur l'onglet FRIDGE, on met à jour l'affichage immédiatement
-        if (selectedFilter == RecipeFilter.FRIDGE) {
-            visibleRecipes = matchingRecipes
-        }
     }
 }

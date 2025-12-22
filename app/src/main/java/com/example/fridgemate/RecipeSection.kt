@@ -184,26 +184,41 @@ fun RecipeScreen(userId: String) {
 @Composable
 fun MatchingRecipeCard(recipe: RecipeData, onClick: () -> Unit) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = WebGreen), // Fond Vert pour mettre en avant
+        colors = CardDefaults.cardColors(containerColor = WebGreen),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
-            .width(260.dp) // Carte large
-            .height(140.dp)
+            .width(280.dp) // Un peu plus large pour afficher les infos
+            .height(150.dp) // Un peu plus haut
             .clickable { onClick() }
     ) {
         Row(modifier = Modifier.fillMaxSize()) {
-            // Placeholder Image (Gauche)
+
+            // 1. IMAGE (CORRIGÉE : Utilise AsyncImage maintenant)
             Box(
                 modifier = Modifier
                     .weight(0.4f)
                     .fillMaxHeight()
-                    .background(Color.White.copy(alpha = 0.2f)),
-                contentAlignment = Alignment.Center
+                    .background(Color.White.copy(alpha = 0.2f))
             ) {
-                Icon(Icons.Outlined.Timer, contentDescription = null, tint = Color.White)
+                if (!recipe.imageUrl.isNullOrEmpty()) {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(recipe.imageUrl)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    // Fallback si pas d'image
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Icon(Icons.Outlined.Timer, contentDescription = null, tint = Color.White)
+                    }
+                }
             }
 
-            // Infos (Droite)
+            // 2. INFOS + COMPTEURS
             Column(
                 modifier = Modifier
                     .weight(0.6f)
@@ -215,30 +230,42 @@ fun MatchingRecipeCard(recipe: RecipeData, onClick: () -> Unit) {
                         text = "Perfect Match!",
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White.copy(alpha = 0.8f),
-                        modifier = Modifier.background(Color.White.copy(alpha = 0.2f), RoundedCornerShape(4.dp)).padding(horizontal = 4.dp, vertical = 2.dp)
+                        color = WebGreen, // Texte vert sur fond blanc
+                        modifier = Modifier
+                            .background(Color.White, RoundedCornerShape(4.dp))
+                            .padding(horizontal = 6.dp, vertical = 2.dp)
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(6.dp))
                     Text(
                         text = recipe.title,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
+                        fontSize = 15.sp,
                         color = Color.White,
                         maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        lineHeight = 18.sp
                     )
                 }
 
+                // Ligne des statistiques (Temps + Ingrédients)
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.Timer, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("${recipe.duration} min", color = Color.White, fontSize = 12.sp)
+                    // Temps
+                    Icon(Icons.Default.Timer, contentDescription = null, tint = Color.White.copy(alpha = 0.8f), modifier = Modifier.size(14.dp))
+                    Text("${recipe.duration}m", color = Color.White.copy(alpha = 0.8f), fontSize = 12.sp)
+
+                    Spacer(modifier = Modifier.width(12.dp))
+
+                    // Ingrédients (Check Vert / Croix Rouge)
+                    // On a
+                    Text("✅ ${recipe.matchingCount}", fontSize = 12.sp, color = Color.White, fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    // Manque
+                    Text("❌ ${recipe.missingCount}", fontSize = 12.sp, color = Color.White.copy(alpha = 0.7f), fontWeight = FontWeight.Normal)
                 }
             }
         }
     }
 }
-
 // --- CARTE VERTICALE CLASSIQUE (Améliorée) ---
 @Composable
 fun RecipeCardItem(recipe: RecipeData, onClick: () -> Unit) {
@@ -249,15 +276,15 @@ fun RecipeCardItem(recipe: RecipeData, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .shadow(2.dp, RoundedCornerShape(16.dp)) // Ombre douce manuelle
+            .shadow(2.dp, RoundedCornerShape(16.dp))
     ) {
         Column {
-            // Image Placeholder
+            // Image
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(100.dp)
-                    .background(WebBg),
+                    .height(110.dp)
+                    .background(Color.LightGray),
                 contentAlignment = Alignment.Center
             ) {
                 if (!recipe.imageUrl.isNullOrEmpty()) {
@@ -271,7 +298,7 @@ fun RecipeCardItem(recipe: RecipeData, onClick: () -> Unit) {
                         modifier = Modifier.fillMaxSize()
                     )
                 } else {
-                    Icon(Icons.Default.Timer, contentDescription = null, tint = WebTextGray) // Icone par defaut
+                    Icon(Icons.Default.Timer, contentDescription = null, tint = WebTextGray)
                 }
             }
 
@@ -279,7 +306,7 @@ fun RecipeCardItem(recipe: RecipeData, onClick: () -> Unit) {
                 Text(
                     text = recipe.title,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 15.sp,
+                    fontSize = 15.sp, // Légèrement réduit pour éviter que ça coupe
                     color = WebTextDark,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -291,27 +318,40 @@ fun RecipeCardItem(recipe: RecipeData, onClick: () -> Unit) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    // Gauche : Temps
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Default.Timer, contentDescription = null, tint = WebTextGray, modifier = Modifier.size(14.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("${recipe.duration}m", fontSize = 12.sp, color = WebTextGray)
+                        Text("${recipe.duration} min", fontSize = 12.sp, color = WebTextGray)
                     }
 
-                    if (recipe.isVegetarian) {
-                        Box(
-                            modifier = Modifier
-                                .background(WebGreen.copy(alpha = 0.1f), RoundedCornerShape(4.dp))
-                                .padding(horizontal = 4.dp, vertical = 2.dp)
-                        ) {
-                            Text("Veg", fontSize = 10.sp, color = WebGreen, fontWeight = FontWeight.Bold)
-                        }
+                    // Droite : Ingrédients (Style Emoji)
+                    // On affiche dès qu'on a fait le calcul (donc même si 0 match, on peut vouloir afficher les manquants)
+                    // Mais pour garder le design propre, affichons-le si on a au moins 1 match OU si on est sur la page
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        // ✅ Ce qu'on a
+                        Text(
+                            text = "✅ ${recipe.matchingCount}",
+                            fontSize = 12.sp,
+                            color = WebTextDark,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        // ❌ Ce qu'il manque
+                        Text(
+                            text = "❌ ${recipe.missingCount}",
+                            fontSize = 12.sp,
+                            color = WebTextGray, // Un peu plus discret en gris
+                            fontWeight = FontWeight.Normal
+                        )
                     }
                 }
             }
         }
     }
 }
-
 // --- VUE DÉTAILLÉE (Nettoyée pour le style Web) ---
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

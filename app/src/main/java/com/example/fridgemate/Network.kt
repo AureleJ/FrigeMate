@@ -72,28 +72,22 @@ data class RecipeIngredient(
 data class RecipeData(
     @SerializedName("_id") val mongoId: String? = null,
     @SerializedName("id") val simpleId: String? = null,
-    @SerializedName("name") val title: String, // <-- Traduction: API envoie "name", on veut "title"
-
-
+    @SerializedName("name") val title: String,
     val description: String?,
-    // Champs spécifiques de ton API
     val prep_time_min: Int? = 0,
     val cook_time_min: Int? = 0,
-
     val ingredients: List<RecipeIngredient>? = emptyList(),
     val instructions: List<String>? = emptyList(),
     val imageUrl: String? = null
 ) {
-    val id: String
-        get() = mongoId ?: simpleId ?: ""
+    val id: String get() = mongoId ?: simpleId ?: ""
+    val duration: Int get() = (prep_time_min ?: 0) + (cook_time_min ?: 0)
+    val isVegetarian: Boolean get() = description?.contains("Veg", true) == true || title.contains("Veg", true) == true
 
-    // On calcule la durée totale pour l'affichage (Prep + Cuisson)
-    val duration: Int
-        get() = (prep_time_min ?: 0) + (cook_time_min ?: 0)
-
-    // Logique végétarienne (basée sur le titre ou la description car pas de champ "category")
-    val isVegetarian: Boolean
-        get() = description?.contains("Veg", true) == true || title.contains("Veg", true)
+    // --- AJOUTS POUR LES COMPTEURS ---
+    // Ces variables seront remplies par le ViewModel
+    var matchingCount: Int = 0
+    var missingCount: Int = 0
 }
 
 data class RecipeSearchRequest(val ingredients: List<String>)
