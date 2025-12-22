@@ -62,8 +62,12 @@ fun MainScreenApp() {
 
     if (userId == null) {
         println("DEBUG: Affichage du LoginScreen") // <--- Mouchard
-        LoginScreen(onLoginSuccess = { id -> userId = id })
+        LoginScreen(onLoginSuccess = { user ->
+            // 👇 CORRECTION ICI : On récupère l'ID depuis l'objet 'user'
+            userId = user.id
+        })
     } else {
+        DashboardScreen(userId = userId!!)
         println("DEBUG: Affichage du Scaffold (Connecté)") // <--- Mouchard
         Scaffold(
             topBar = {
@@ -142,7 +146,9 @@ fun NavigationGraph(navController: NavHostController, userId: String) {
         // 2. RECETTES (Pointe vers ton fichier RecipeSection.kt)
         composable(Screen.Recipes.route) {
             // J'assume que dans RecipeSection.kt tu as une fonction @Composable nommée RecipeScreen()
-            RecipeScreen()
+            RecipeScreen(
+                userId = userId
+            )
         }
     }
 }

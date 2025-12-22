@@ -16,3 +16,4 @@ val WebTextDark = Color(0xFF1A202C)    // Noir doux (Celui qu'il te manque)
 val WebTextGray = Color(0xFF718096)    // Gris pour les textes secondaires
 val WebRed = Color(0xFFE53E3E)         // Rouge pour les alertes
 val WebGreen = Color(0xFF48BB78)       // Vert du site
+val WebOrange = Color(0xFFDD6B20)      // Orange alerte

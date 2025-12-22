@@ -54,6 +54,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.6.0")
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.compose.foundation)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -88,4 +89,11 @@ dependencies {
 
     // Icons extended (pour l'icone barcode si besoin, sinon on utilise une autre)
     implementation("androidx.compose.material:material-icons-extended:1.6.0")
+
+    // Réseau (Retrofit) + Conversion JSON (Gson)
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Chargement d'images (Coil)
+    implementation("io.coil-kt:coil-compose:2.5.0")
 }

@@ -10,9 +10,17 @@ import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 
 /* --- 1. LOGIN & USER --- */
-data class LoginRequest(val username: String)
-data class LoginResponse(val success: Boolean, val user: UserData)
+data class RegisterRequest(val username: String)
+// 1. Modèle de requête (Le body est le même pour login et création : { "username": "..." })
+data class UserRequest(val username: String)
 
+// 2. Modèle de réponse pour le LOGIN (qui contient "success")
+data class LoginResponse(
+    val success: Boolean,
+    val user: UserData? // Peut être null si erreur
+)
+
+// 3. Modèle de l'Utilisateur (Reste le même, c'est ce que renvoie la création)
 data class UserData(
     @SerializedName("_id") val mongoId: String? = null,
     @SerializedName("id") val simpleId: String? = null,
@@ -20,7 +28,6 @@ data class UserData(
 ) {
     val id: String get() = mongoId ?: simpleId ?: ""
 }
-
 /* --- 2. FRIDGE & INGREDIENTS --- */
 data class IngredientsResponse(
     val ingredients: List<IngredientData>
@@ -67,6 +74,7 @@ data class RecipeData(
 
     @SerializedName("name") val title: String, // <-- Traduction: API envoie "name", on veut "title"
 
+
     val description: String?,
 
     // Champs spécifiques de ton API
@@ -94,7 +102,12 @@ data class RecipeSearchRequest(val ingredients: List<String>)
 interface FridgeApiService {
     // Users
     @POST("users/login")
-    suspend fun login(@Body request: LoginRequest): LoginResponse
+    suspend fun login(@Body request: UserRequest): LoginResponse
+
+    // Route CRÉATION (POST /) : Renvoie DIRECTEMENT un UserData
+    // Attention : J'assume que ton routeur est monté sur "/users" dans ton server.js
+    @POST("users")
+    suspend fun createUser(@Body request: UserRequest): UserData
 
     // Fridge
     @retrofit2.http.GET("users/{userId}/fridge/ingredients")
@@ -103,8 +116,16 @@ interface FridgeApiService {
     @retrofit2.http.POST("users/{userId}/fridge/ingredients")
     suspend fun addIngredient(@retrofit2.http.Path("userId") userId: String, @retrofit2.http.Body ingredient: AddIngredientRequest): IngredientData
 
+
     @retrofit2.http.DELETE("users/{userId}/fridge/ingredients/{ingredientId}")
     suspend fun deleteIngredient(@retrofit2.http.Path("userId") userId: String, @retrofit2.http.Path("ingredientId") ingredientId: String): retrofit2.Response<ResponseBody>
+
+    @retrofit2.http.PUT("users/{userId}/fridge/ingredients/{ingredientId}")
+    suspend fun updateIngredient(
+        @retrofit2.http.Path("userId") userId: String,
+        @retrofit2.http.Path("ingredientId") ingredientId: String,
+        @retrofit2.http.Body ingredient: AddIngredientRequest // On réutilise le même objet que pour l'ajout
+    ): IngredientData
 
     // Recipes
     @retrofit2.http.GET("recipes")
@@ -112,6 +133,7 @@ interface FridgeApiService {
 
     @retrofit2.http.POST("recipes/search")
     suspend fun searchRecipes(@retrofit2.http.Body request: RecipeSearchRequest): RecipesResponse
+
 }
 
 // Modèles pour la réponse OFF
