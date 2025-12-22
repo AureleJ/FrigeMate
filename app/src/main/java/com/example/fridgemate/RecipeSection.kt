@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.*
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,7 +64,8 @@ fun RecipeScreen(userId: String) { // On ajoute userId pour récupérer le frigo
     }
 
     Scaffold(
-        containerColor = WebBg
+        containerColor = WebBg,
+        contentWindowInsets = WindowInsets(0.dp)
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
             if (selectedRecipe != null) {
@@ -296,89 +298,100 @@ fun RecipeCardItem(recipe: RecipeData, onClick: () -> Unit) {
 @Composable
 fun RecipeDetailView(recipe: RecipeData, onBack: () -> Unit) {
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { },
-                navigationIcon = {
-                    IconButton(onClick = onBack, modifier = Modifier.background(Color.White, CircleShape)) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = WebTextDark)
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
-            )
-        },
+        contentWindowInsets = WindowInsets(0.dp), // Ignore les marges système globales
         containerColor = WebBg
     ) { paddingValues ->
-        Column(
+        // On utilise une Box pour pouvoir empiler le bouton SUR l'image
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
+                // On applique le padding seulement en bas (pour la barre de nav)
+                // et pas en haut, pour que l'image monte tout en haut.
+                .padding(bottom = paddingValues.calculateBottomPadding())
         ) {
-            // Grande Image
-            Box(
+
+            // COUCHE 1 : Le contenu défilant (Image + Texte)
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp)
-                    .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
-                    .background(Color.LightGray),
-                contentAlignment = Alignment.Center
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
             ) {
-                Text("Tasty Image Here", color = Color.Gray)
-            }
-
-            Column(modifier = Modifier.padding(20.dp)) {
-                // Header
-                Text(recipe.title, fontSize = 28.sp, fontWeight = FontWeight.ExtraBold, color = WebTextDark)
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.Timer, contentDescription = null, tint = WebGreen)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("${recipe.prep_time_min}m prep  •  ${recipe.cook_time_min}m cook", fontWeight = FontWeight.Medium, color = WebTextGray)
+                // Grande Image (qui touche maintenant le haut de l'écran)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(300.dp) // J'ai légèrement agrandi pour l'effet immersif
+                        .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
+                        .background(Color.LightGray),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Tasty Image Here", color = Color.Gray)
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                // Le reste du contenu (Titre, ingrédients...)
+                Column(modifier = Modifier.padding(20.dp)) {
+                    // Header
+                    Text(recipe.title, fontSize = 28.sp, fontWeight = FontWeight.ExtraBold, color = WebTextDark)
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                // Carte Ingrédients
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = WebCardBg),
-                    shape = RoundedCornerShape(16.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text("Ingredients", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = WebTextDark)
-                        Spacer(modifier = Modifier.height(12.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Default.Timer, contentDescription = null, tint = WebGreen)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("${recipe.prep_time_min}m prep  •  ${recipe.cook_time_min}m cook", fontWeight = FontWeight.Medium, color = WebTextGray)
+                    }
 
-                        recipe.ingredients?.forEach { ing ->
-                            Row(modifier = Modifier.padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-                                Box(modifier = Modifier.size(6.dp).background(WebGreen, CircleShape))
-                                Spacer(modifier = Modifier.width(12.dp))
-                                val qty = if (!ing.quantity.isNullOrEmpty()) "${ing.quantity} ${ing.unit ?: ""} " else ""
-                                Text(
-                                    text = "$qty${ing.name}",
-                                    fontSize = 15.sp,
-                                    color = WebTextDark
-                                )
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    // Carte Ingrédients
+                    Card(
+                        colors = CardDefaults.cardColors(containerColor = WebCardBg),
+                        shape = RoundedCornerShape(16.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text("Ingredients", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = WebTextDark)
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            recipe.ingredients?.forEach { ing ->
+                                Row(modifier = Modifier.padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    Box(modifier = Modifier.size(6.dp).background(WebGreen, CircleShape))
+                                    Spacer(modifier = Modifier.width(12.dp))
+                                    val qty = if (!ing.quantity.isNullOrEmpty()) "${ing.quantity} ${ing.unit ?: ""} " else ""
+                                    Text(
+                                        text = "$qty${ing.name}",
+                                        fontSize = 15.sp,
+                                        color = WebTextDark
+                                    )
+                                }
+                                Divider(color = WebBg, thickness = 1.dp)
                             }
-                            Divider(color = WebBg, thickness = 1.dp)
                         }
                     }
-                }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
-                // Instructions
-                Text("Instructions", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = WebTextDark)
-                Spacer(modifier = Modifier.height(12.dp))
-                recipe.instructions?.forEachIndexed { index, step ->
-                    Row(modifier = Modifier.padding(vertical = 8.dp)) {
-                        Text("${index + 1}.", fontWeight = FontWeight.Bold, color = WebGreen, modifier = Modifier.width(24.dp))
-                        Text(step, fontSize = 15.sp, color = WebTextGray, lineHeight = 22.sp)
+                    // Instructions
+                    Text("Instructions", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = WebTextDark)
+                    Spacer(modifier = Modifier.height(12.dp))
+                    recipe.instructions?.forEachIndexed { index, step ->
+                        Row(modifier = Modifier.padding(vertical = 8.dp)) {
+                            Text("${index + 1}.", fontWeight = FontWeight.Bold, color = WebGreen, modifier = Modifier.width(24.dp))
+                            Text(step, fontSize = 15.sp, color = WebTextGray, lineHeight = 22.sp)
+                        }
                     }
+                    Spacer(modifier = Modifier.height(40.dp))
                 }
+            }
 
-                Spacer(modifier = Modifier.height(40.dp))
+            // COUCHE 2 : Le bouton retour (Flottant par-dessus)
+            IconButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .padding(top = 45.dp, start = 20.dp) // Marge manuelle pour éviter la barre de statut
+                    .background(Color.White, CircleShape)
+                    .align(Alignment.TopStart) // Ancré en haut à gauche
+            ) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = WebTextDark)
             }
         }
     }

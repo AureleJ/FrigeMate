@@ -38,6 +38,7 @@ fun IngredientScreen(userId: String) {
 
     Scaffold(
         containerColor = WebBg, // Le même fond gris que le Dashboard
+        contentWindowInsets = WindowInsets(0.dp),
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { showAddDialog = true },

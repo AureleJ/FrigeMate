@@ -1,7 +1,7 @@
 package com.example.fridgemate
 
 import android.Manifest
-import android.util.Size // Attention à cet import pour CameraX si utilisé, sinon android.util.Size
+import android.util.Size
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
@@ -18,7 +18,9 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.outlined.Warning
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.*
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.material.icons.filled.DateRange // Pour l'icône calendrier
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -50,14 +51,19 @@ fun DashboardScreen(userId: String) {
     }
 
     Scaffold(
-        containerColor = WebBg
+        containerColor = WebBg,
+        // CORRECTION ICI : On supprime les marges systèmes par défaut (les bandes grises)
+        contentWindowInsets = WindowInsets(0.dp)
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                // On garde paddingValues (qui vaut maintenant 0) par bonne pratique,
+                // mais on ajoute un padding manuel en haut pour ne pas coller l'heure du téléphone
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
-                .padding(20.dp),
+                .padding(20.dp)
+                .padding(top = 10.dp), // Petit ajout extra pour éviter de coller tout en haut
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
 
@@ -74,7 +80,7 @@ fun DashboardScreen(userId: String) {
                     color = WebTextDark
                 )
 
-                // Petit bouton "+" discret en haut (remplace le FAB)
+                // Petit bouton "+" discret en haut
                 IconButton(
                     onClick = { showAddDialog = true },
                     modifier = Modifier
@@ -146,7 +152,7 @@ fun DashboardScreen(userId: String) {
         }
     }
 
-    // --- DIALOGUE D'AJOUT (Restauré) ---
+    // --- DIALOGUE D'AJOUT ---
     if (showAddDialog) {
         AddIngredientDialog(
             onDismiss = { showAddDialog = false },
@@ -158,37 +164,32 @@ fun DashboardScreen(userId: String) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class) // Nécessaire pour le DatePicker
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddIngredientDialog(onDismiss: () -> Unit, onConfirm: (String, String, String) -> Unit) {
     val viewModel: DashboardViewModel = viewModel()
 
-    // États du formulaire
     var name by remember { mutableStateOf("") }
     var quantity by remember { mutableStateOf("") }
-    var date by remember { mutableStateOf("") } // La date stockée en String (YYYY-MM-DD)
+    var date by remember { mutableStateOf("") }
 
-    // États pour le Scanner et le Calendrier
     var showScanner by remember { mutableStateOf(false) }
     var showDatePicker by remember { mutableStateOf(false) }
 
-    // État du DatePicker Material 3
     val datePickerState = rememberDatePickerState()
 
-    // Permission Caméra (inchangé)
     val cameraPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (isGranted) showScanner = true
     }
 
-    // --- 1. GESTION DU CALENDRIER (DatePicker) ---
+    // --- 1. GESTION DU CALENDRIER ---
     if (showDatePicker) {
         DatePickerDialog(
             onDismissRequest = { showDatePicker = false },
             confirmButton = {
                 TextButton(onClick = {
-                    // On récupère la date sélectionnée (en millisecondes)
                     datePickerState.selectedDateMillis?.let { millis ->
                         date = convertMillisToDate(millis)
                     }
@@ -207,7 +208,7 @@ fun AddIngredientDialog(onDismiss: () -> Unit, onConfirm: (String, String, Strin
         }
     }
 
-    // --- 2. GESTION DU SCANNER (inchangé) ---
+    // --- 2. GESTION DU SCANNER ---
     if (showScanner) {
         Dialog(onDismissRequest = { showScanner = false }) {
             Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
@@ -234,7 +235,6 @@ fun AddIngredientDialog(onDismiss: () -> Unit, onConfirm: (String, String, Strin
             title = { Text("Add Item", color = WebTextDark, fontWeight = FontWeight.Bold) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    // Champ Nom + Scan
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         OutlinedTextField(
                             value = name,
@@ -248,7 +248,6 @@ fun AddIngredientDialog(onDismiss: () -> Unit, onConfirm: (String, String, Strin
                         }
                     }
 
-                    // Champ Quantité
                     OutlinedTextField(
                         value = quantity,
                         onValueChange = { quantity = it },
@@ -257,22 +256,19 @@ fun AddIngredientDialog(onDismiss: () -> Unit, onConfirm: (String, String, Strin
                         singleLine = true
                     )
 
-                    // Champ Date (Modifié pour ouvrir le calendrier)
                     OutlinedTextField(
                         value = date,
-                        onValueChange = { }, // On empêche l'écriture manuelle directe ici
+                        onValueChange = { },
                         label = { Text("Expiry Date") },
                         placeholder = { Text("YYYY-MM-DD") },
                         modifier = Modifier.fillMaxWidth(),
-                        readOnly = true, // Le clavier ne s'ouvrira pas
+                        readOnly = true,
                         singleLine = true,
                         trailingIcon = {
-                            // Clic sur l'icône calendrier
                             IconButton(onClick = { showDatePicker = true }) {
                                 Icon(Icons.Default.DateRange, contentDescription = "Select Date", tint = WebGreen)
                             }
                         },
-                        // On détecte aussi le clic sur le champ lui-même (InteractionSource serait plus propre mais ceci fonctionne)
                         interactionSource = remember { MutableInteractionSource() }
                             .also { interactionSource ->
                                 LaunchedEffect(interactionSource) {
@@ -299,7 +295,6 @@ fun AddIngredientDialog(onDismiss: () -> Unit, onConfirm: (String, String, Strin
     }
 }
 
-// --- FONCTION UTILITAIRE (À ajouter en bas du fichier ou hors de la classe) ---
 fun convertMillisToDate(millis: Long): String {
     val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     return formatter.format(Date(millis))
