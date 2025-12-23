@@ -27,7 +27,7 @@ class DashboardViewModel : ViewModel() {
     // Pour recharger les données après un ajout/suppression
     private var currentUserId: String? = null
 
-    fun loadData(userId: String) {
+    fun loadData(userId: String?) {
         currentUserId = userId
         viewModelScope.launch {
             uiState = DashboardUiState.Loading
@@ -102,6 +102,36 @@ class DashboardViewModel : ViewModel() {
                 loadData(userId)
             } catch (e: Exception) {
                 println("DEBUG: Crash lors de la suppression : ${e.localizedMessage}")
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun updateIngredient(id: String, name: String, qty: String, unit: String, date: String, category: String) {
+        viewModelScope.launch {
+            try {
+                // On prépare l'objet pour l'API
+                val request = AddIngredientRequest(name, qty, unit, date, category)
+
+                // Appel API (Assure-toi que updateIngredient est bien dans ton Interface FridgeApiService dans Network.kt)
+                // Si tu ne l'as pas encore, utilise addIngredient pour l'instant ou ajoute le endpoint PUT
+                withContext(Dispatchers.IO) {
+                    // userId doit être accessible ici, ou passé en paramètre de la fonction si besoin
+                    // Pour cet exemple, j'assume que tu le gères ou que tu le passes
+                    // RetrofitClient.apiService.updateIngredient(userId, id, request)
+
+                    // NOTE : Si tu n'as pas encore la route PUT côté serveur, tu peux tricher :
+                    // RetrofitClient.apiService.deleteIngredient(userId, id)
+                    // RetrofitClient.apiService.addIngredient(userId, request)
+
+                    // MAIS LE MIEUX est d'utiliser la route update définie dans Network.kt précédemment :
+                    RetrofitClient.apiService.updateIngredient(currentUserId, id, request)
+                }
+
+                // On recharge la liste pour voir les modifs
+                loadData(currentUserId)
+            } catch (e: Exception) {
+                // Gérer l'erreur
                 e.printStackTrace()
             }
         }

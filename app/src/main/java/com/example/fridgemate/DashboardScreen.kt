@@ -1,7 +1,6 @@
 package com.example.fridgemate
 
 import android.Manifest
-import android.util.Size
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
@@ -14,13 +13,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.*
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,12 +38,16 @@ import java.util.Date
 import java.util.Locale
 
 @Composable
-fun DashboardScreen(userId: String) {
+fun DashboardScreen(
+    userId: String,
+    onSeeAllClick: () -> Unit // <--- NOUVEAU PARAMÈTRE POUR LA NAVIGATION
+) {
     val viewModel: DashboardViewModel = viewModel()
     val state = viewModel.uiState
 
-    // État pour ouvrir/fermer le dialogue d'ajout
-    var showAddDialog by remember { mutableStateOf(false) }
+    // GESTION UNIFIÉE DU DIALOGUE (AJOUT ET ÉDITION)
+    var showDialog by remember { mutableStateOf(false) }
+    var ingredientToEdit by remember { mutableStateOf<IngredientData?>(null) }
 
     LaunchedEffect(userId) {
         viewModel.loadData(userId)
@@ -52,22 +55,19 @@ fun DashboardScreen(userId: String) {
 
     Scaffold(
         containerColor = WebBg,
-        // CORRECTION ICI : On supprime les marges systèmes par défaut (les bandes grises)
         contentWindowInsets = WindowInsets(0.dp)
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                // On garde paddingValues (qui vaut maintenant 0) par bonne pratique,
-                // mais on ajoute un padding manuel en haut pour ne pas coller l'heure du téléphone
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
                 .padding(20.dp)
-                .padding(top = 10.dp), // Petit ajout extra pour éviter de coller tout en haut
+                .padding(top = 10.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
 
-            // --- EN-TÊTE AVEC BOUTON D'AJOUT ---
+            // --- EN-TÊTE ---
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -80,9 +80,12 @@ fun DashboardScreen(userId: String) {
                     color = WebTextDark
                 )
 
-                // Petit bouton "+" discret en haut
+                // Bouton Ajout Rapide
                 IconButton(
-                    onClick = { showAddDialog = true },
+                    onClick = {
+                        ingredientToEdit = null // Mode Ajout
+                        showDialog = true
+                    },
                     modifier = Modifier
                         .size(40.dp)
                         .background(WebGreen, CircleShape)
@@ -101,12 +104,17 @@ fun DashboardScreen(userId: String) {
                     ErrorCard(state.message) { viewModel.loadData(userId) }
                 }
                 is DashboardUiState.Success -> {
-                    // Calculs
                     val ingredients = state.ingredients
+
+                    // --- 1. SECTION ALERTES (Inchangée) ---
+                    if (state.alerts.isNotEmpty()) {
+                        AlertSection(state.alerts)
+                    }
+
+                    // --- 2. RÉSUMÉ FRIGO (Inchangé) ---
                     val totalCount = ingredients.size
                     var expiredCount = 0
                     var expiringSoonCount = 0
-
                     ingredients.forEach { ing ->
                         val days = getDaysRemaining(ing.expiryDate)
                         if (days != null) {
@@ -114,15 +122,9 @@ fun DashboardScreen(userId: String) {
                             else if (days <= 3) expiringSoonCount++
                         }
                     }
-
                     val categoryDistribution = ingredients
                         .groupingBy { it.category?.replaceFirstChar { c -> c.uppercase() } ?: "General" }
                         .eachCount()
-
-                    // Affichage des Sections
-                    if (state.alerts.isNotEmpty()) {
-                        AlertSection(state.alerts)
-                    }
 
                     FridgeSummarySection(
                         totalCount = totalCount,
@@ -131,19 +133,52 @@ fun DashboardScreen(userId: String) {
                         categoryDistribution = categoryDistribution
                     )
 
-                    // Liste rapide
+                    // --- 3. SECTION "MY INGREDIENTS" (MODIFIÉE) ---
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Text("Recent Items", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = WebTextDark)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text("Recent Items", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = WebTextDark)
+
+                            // Bouton "Voir tout"
+                            TextButton(onClick = onSeeAllClick) {
+                                Text("See All", color = WebGreen, fontWeight = FontWeight.Bold)
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Icon(Icons.Default.ArrowForward, contentDescription = null, tint = WebGreen, modifier = Modifier.size(16.dp))
+                            }
+                        }
 
                         if (ingredients.isEmpty()) {
                             Text("Your fridge is empty.", color = WebTextGray)
                         } else {
-                            ingredients.take(5).forEach { ingredient ->
-                                IngredientItem(
+                            // On prend les 4 derniers éléments (ou premiers selon le tri de l'API)
+                            // Si tu veux les derniers AJOUTÉS, assure-toi que l'API renvoie dans l'ordre chronologique
+                            // Sinon utilise .takeLast(4).reversed()
+                            ingredients.take(4).forEach { ingredient ->
+
+                                // ON UTILISE LA BELLE CARTE ICI
+                                IngredientCardFull(
                                     ingredient = ingredient,
+                                    onClick = {
+                                        ingredientToEdit = ingredient // Mode Édition
+                                        showDialog = true
+                                    },
                                     onDelete = { viewModel.deleteIngredient(ingredient.id) }
                                 )
                             }
+                        }
+
+                        // Gros bouton en bas aussi (Optionnel, mais sympa)
+                        Button(
+                            onClick = onSeeAllClick,
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(containerColor = WebCardBg),
+                            shape = RoundedCornerShape(12.dp),
+                            elevation = ButtonDefaults.buttonElevation(0.dp)
+                        ) {
+                            Text("View all ingredients in Pantry", color = WebTextGray)
                         }
                     }
                     Spacer(modifier = Modifier.height(20.dp))
@@ -152,18 +187,25 @@ fun DashboardScreen(userId: String) {
         }
     }
 
-    // --- DIALOGUE D'AJOUT ---
-    if (showAddDialog) {
-        AddIngredientDialog(
-            onDismiss = { showAddDialog = false },
-            onConfirm = { name, qty, date ->
-                viewModel.addIngredient(name, qty, date)
-                showAddDialog = false
+    // --- DIALOGUE UNIFIÉ ---
+    // On utilise IngredientDialog (celui créé à l'étape précédente)
+    if (showDialog) {
+        IngredientDialog(
+            ingredientToEdit = ingredientToEdit,
+            onDismiss = { showDialog = false },
+            onConfirm = { name, qty, unit, date, category ->
+                if (ingredientToEdit == null) {
+                    // MODE AJOUT
+                    viewModel.addIngredient(name, "$qty $unit", date) // Adapte selon tes besoins de concaténation
+                } else {
+                    // MODE ÉDITION
+                    viewModel.updateIngredient(ingredientToEdit!!.id, name, qty, unit, date, category)
+                }
+                showDialog = false
             }
         )
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddIngredientDialog(onDismiss: () -> Unit, onConfirm: (String, String, String) -> Unit) {

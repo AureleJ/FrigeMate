@@ -1,7 +1,6 @@
 //RecipeSection.kt
 package com.example.fridgemate
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,18 +17,17 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.*
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -77,8 +75,15 @@ fun RecipeScreen(userId: String) {
         Box(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
             if (selectedRecipe != null) {
                 // --- MODE DÉTAIL ---
+                val myFridge = if (dashboardState is DashboardUiState.Success) {
+                    dashboardState.ingredients
+                } else {
+                    emptyList()
+                }
+
                 RecipeDetailView(
                     recipe = selectedRecipe!!,
+                    userIngredients = myFridge, // On passe le frigo ici
                     onBack = { selectedRecipe = null }
                 )
             } else {
@@ -183,17 +188,25 @@ fun RecipeScreen(userId: String) {
 // --- CARTE HORIZONTALE (Cook with what you have) ---
 @Composable
 fun MatchingRecipeCard(recipe: RecipeData, onClick: () -> Unit) {
+    // 1. LOGIQUE DYNAMIQUE DU BADGE
+    val isPerfect = recipe.missingCount == 0
+    val badgeText = if (isPerfect) "Perfect Match!" else "Best Match"
+
+    // On utilise WebOrange s'il manque des trucs, sinon WebGreen.
+    // (Si WebOrange n'est pas reconnu, utilise Color(0xFFF57C00))
+    val badgeColor = if (isPerfect) WebGreen else Color(0xFFF57C00)
+
     Card(
         colors = CardDefaults.cardColors(containerColor = WebGreen),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
-            .width(280.dp) // Un peu plus large pour afficher les infos
-            .height(150.dp) // Un peu plus haut
+            .width(280.dp)
+            .height(150.dp)
             .clickable { onClick() }
     ) {
         Row(modifier = Modifier.fillMaxSize()) {
 
-            // 1. IMAGE (CORRIGÉE : Utilise AsyncImage maintenant)
+            // Image (Inchangée)
             Box(
                 modifier = Modifier
                     .weight(0.4f)
@@ -211,14 +224,13 @@ fun MatchingRecipeCard(recipe: RecipeData, onClick: () -> Unit) {
                         modifier = Modifier.fillMaxSize()
                     )
                 } else {
-                    // Fallback si pas d'image
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Icon(Icons.Outlined.Timer, contentDescription = null, tint = Color.White)
                     }
                 }
             }
 
-            // 2. INFOS + COMPTEURS
+            // Infos
             Column(
                 modifier = Modifier
                     .weight(0.6f)
@@ -226,11 +238,12 @@ fun MatchingRecipeCard(recipe: RecipeData, onClick: () -> Unit) {
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Column {
+                    // 2. LE BADGE UTILISE MAINTENANT LES VARIABLES DYNAMIQUES
                     Text(
-                        text = "Perfect Match!",
+                        text = badgeText,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
-                        color = WebGreen, // Texte vert sur fond blanc
+                        color = badgeColor, // La couleur change ici
                         modifier = Modifier
                             .background(Color.White, RoundedCornerShape(4.dp))
                             .padding(horizontal = 6.dp, vertical = 2.dp)
@@ -247,25 +260,24 @@ fun MatchingRecipeCard(recipe: RecipeData, onClick: () -> Unit) {
                     )
                 }
 
-                // Ligne des statistiques (Temps + Ingrédients)
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    // Temps
                     Icon(Icons.Default.Timer, contentDescription = null, tint = Color.White.copy(alpha = 0.8f), modifier = Modifier.size(14.dp))
                     Text("${recipe.duration}m", color = Color.White.copy(alpha = 0.8f), fontSize = 12.sp)
 
                     Spacer(modifier = Modifier.width(12.dp))
 
-                    // Ingrédients (Check Vert / Croix Rouge)
-                    // On a
+                    // Compteurs
                     Text("✅ ${recipe.matchingCount}", fontSize = 12.sp, color = Color.White, fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.width(8.dp))
-                    // Manque
+
+                    // On affiche le nombre manquant (même s'il est à 0, c'est rassurant de voir ❌ 0)
                     Text("❌ ${recipe.missingCount}", fontSize = 12.sp, color = Color.White.copy(alpha = 0.7f), fontWeight = FontWeight.Normal)
                 }
             }
         }
     }
 }
+
 // --- CARTE VERTICALE CLASSIQUE (Améliorée) ---
 @Composable
 fun RecipeCardItem(recipe: RecipeData, onClick: () -> Unit) {
@@ -355,86 +367,144 @@ fun RecipeCardItem(recipe: RecipeData, onClick: () -> Unit) {
 // --- VUE DÉTAILLÉE (Nettoyée pour le style Web) ---
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipeDetailView(recipe: RecipeData, onBack: () -> Unit) {
+fun RecipeDetailView(
+    recipe: RecipeData,
+    userIngredients: List<IngredientData>, // Nouveau paramètre
+    onBack: () -> Unit
+) {
     Scaffold(
-        contentWindowInsets = WindowInsets(0.dp), // Ignore les marges système globales
+        contentWindowInsets = WindowInsets(0.dp),
         containerColor = WebBg
     ) { paddingValues ->
-        // On utilise une Box pour pouvoir empiler le bouton SUR l'image
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                // On applique le padding seulement en bas (pour la barre de nav)
-                // et pas en haut, pour que l'image monte tout en haut.
                 .padding(bottom = paddingValues.calculateBottomPadding())
         ) {
-
-            // COUCHE 1 : Le contenu défilant (Image + Texte)
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {
-                // Grande Image (qui touche maintenant le haut de l'écran)
+                // ... (La partie Image Header reste inchangée) ...
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(300.dp)
                         .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
-                        .background(Color.LightGray) // Couleur de fond pendant le chargement
+                        .background(Color.LightGray)
                 ) {
                     if (!recipe.imageUrl.isNullOrEmpty()) {
                         AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(recipe.imageUrl)
-                                .crossfade(true)
-                                .build(),
-                            contentDescription = recipe.title,
-                            contentScale = ContentScale.Crop, // Important pour remplir la zone
+                            model = ImageRequest.Builder(LocalContext.current).data(recipe.imageUrl)
+                                .crossfade(true).build(),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
                             modifier = Modifier.fillMaxSize()
                         )
-                    } else {
-                        // Fallback si pas d'image
-                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            Text("No Image", color = Color.Gray)
-                        }
                     }
                 }
 
-                // Le reste du contenu (Titre, ingrédients...)
                 Column(modifier = Modifier.padding(20.dp)) {
-                    // Header
-                    Text(recipe.title, fontSize = 28.sp, fontWeight = FontWeight.ExtraBold, color = WebTextDark)
+                    // Header (Titre, Temps...) reste inchangé
+                    Text(
+                        recipe.title,
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = WebTextDark
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
-
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Default.Timer, contentDescription = null, tint = WebGreen)
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("${recipe.prep_time_min}m prep  •  ${recipe.cook_time_min}m cook", fontWeight = FontWeight.Medium, color = WebTextGray)
+                        Text(
+                            "${recipe.duration} min total time",
+                            fontWeight = FontWeight.Medium,
+                            color = WebTextGray
+                        )
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    // Carte Ingrédients
+                    // --- CARTE INGRÉDIENTS INTELLIGENTE ---
                     Card(
                         colors = CardDefaults.cardColors(containerColor = WebCardBg),
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
-                            Text("Ingredients", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = WebTextDark)
+                            Text(
+                                "Ingredients",
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = WebTextDark
+                            )
                             Spacer(modifier = Modifier.height(12.dp))
 
-                            recipe.ingredients?.forEach { ing ->
-                                Row(modifier = Modifier.padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-                                    Box(modifier = Modifier.size(6.dp).background(WebGreen, CircleShape))
+                            recipe.ingredients?.forEach { recipeIng ->
+
+                                // 1. LA LOGIQUE DE COMPARAISON
+                                val rName = recipeIng.name ?: ""
+                                val isPresent = userIngredients.any { userIng ->
+                                    val uName = userIng.name
+                                    rName.contains(
+                                        uName,
+                                        ignoreCase = true
+                                    ) || uName.contains(rName, ignoreCase = true)
+                                }
+
+                                // 2. L'AFFICHAGE DYNAMIQUE
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 8.dp), // Un peu plus d'espace
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    // Icône (Check Vert ou Croix Rouge)
+                                    if (isPresent) {
+                                        Icon(
+                                            Icons.Default.CheckCircle,
+                                            contentDescription = "Have",
+                                            tint = WebGreen,
+                                            modifier = Modifier.size(20.dp)
+                                        )
+                                    } else {
+                                        Icon(
+                                            Icons.Default.Close,
+                                            contentDescription = "Missing",
+                                            tint = WebRed,
+                                            modifier = Modifier.size(20.dp)
+                                        )
+                                    }
+
                                     Spacer(modifier = Modifier.width(12.dp))
-                                    val qty = if (!ing.quantity.isNullOrEmpty()) "${ing.quantity} ${ing.unit ?: ""} " else ""
-                                    Text(
-                                        text = "$qty${ing.name}",
-                                        fontSize = 15.sp,
-                                        color = WebTextDark
-                                    )
+
+                                    Column {
+                                        val qty =
+                                            if (!recipeIng.quantity.isNullOrEmpty()) "${recipeIng.quantity} " else ""
+
+                                        // Nom de l'ingrédient
+                                        Text(
+                                            text = "$qty${recipeIng.name}",
+                                            fontSize = 15.sp,
+                                            // Si on l'a, texte normal. Si on l'a pas, texte un peu grisé ou rouge selon ta préférence
+                                            color = if (isPresent) WebTextDark else WebTextDark.copy(
+                                                alpha = 0.6f
+                                            ),
+                                            fontWeight = if (isPresent) FontWeight.Medium else FontWeight.Normal,
+                                            textDecoration = if (isPresent) null else null // Tu pourrais barrer si tu voulais
+                                        )
+
+                                        // Petit texte "Missing" en dessous si absent
+                                        if (!isPresent) {
+                                            Text(
+                                                text = "Missing",
+                                                fontSize = 11.sp,
+                                                color = WebRed,
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                        }
+                                    }
                                 }
                                 Divider(color = WebBg, thickness = 1.dp)
                             }
@@ -443,28 +513,42 @@ fun RecipeDetailView(recipe: RecipeData, onBack: () -> Unit) {
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    // Instructions
-                    Text("Instructions", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = WebTextDark)
-                    Spacer(modifier = Modifier.height(12.dp))
+                    // Instructions (Reste inchangé)
+                    Text(
+                        "Instructions",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = WebTextDark
+                    )
+                    // ... (reste de ton code instructions) ...
                     recipe.instructions?.forEachIndexed { index, step ->
                         Row(modifier = Modifier.padding(vertical = 8.dp)) {
-                            Text("${index + 1}.", fontWeight = FontWeight.Bold, color = WebGreen, modifier = Modifier.width(24.dp))
+                            Text(
+                                "${index + 1}.",
+                                fontWeight = FontWeight.Bold,
+                                color = WebGreen,
+                                modifier = Modifier.width(24.dp)
+                            )
                             Text(step, fontSize = 15.sp, color = WebTextGray, lineHeight = 22.sp)
                         }
                     }
-                    Spacer(modifier = Modifier.height(40.dp))
+                    Spacer(modifier = Modifier.height(60.dp)) // Marge pour le bas
                 }
             }
 
-            // COUCHE 2 : Le bouton retour (Flottant par-dessus)
+            // Bouton Retour (Reste inchangé)
             IconButton(
                 onClick = onBack,
                 modifier = Modifier
-                    .padding(top = 45.dp, start = 20.dp) // Marge manuelle pour éviter la barre de statut
+                    .padding(top = 45.dp, start = 20.dp)
                     .background(Color.White, CircleShape)
-                    .align(Alignment.TopStart) // Ancré en haut à gauche
+                    .align(Alignment.TopStart)
             ) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = WebTextDark)
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = WebTextDark
+                )
             }
         }
     }

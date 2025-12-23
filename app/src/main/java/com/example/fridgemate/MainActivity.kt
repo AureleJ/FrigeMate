@@ -19,6 +19,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 
 // --- Routes ---
 sealed class Screen(val route: String, val title: String, val icon: ImageVector) {
@@ -67,23 +68,23 @@ fun MainScreenApp() {
             userId = user.id
         })
     } else {
-        DashboardScreen(userId = userId!!)
         println("DEBUG: Affichage du Scaffold (Connecté)") // <--- Mouchard
         Scaffold(
             topBar = {
                 TopAppBar(
                     title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            if (currentRoute == Screen.Dashboard.route || currentRoute == null) {
-                                Icon(
-                                    Icons.Default.Kitchen,
-                                    contentDescription = null,
-                                    tint = Color.White
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                            }
+
+                            Icon(
+                                Icons.Default.Kitchen,
+                                contentDescription = null,
+                                tint = Color.White
+                            )
+
+                            Spacer(modifier = Modifier.width(8.dp))
+
                             Text(
-                                "FridgeMate $currentScreenTitle",
+                                "FridgeMate",
                                 fontSize = 18.sp,
                                 color = Color.White
                             )
@@ -115,13 +116,21 @@ fun BottomNavigationBar(navController: NavHostController) {
                 selected = currentRoute == screen.route,
                 onClick = {
                     navController.navigate(screen.route) {
-                        popUpTo(navController.graph.startDestinationId) { saveState = true }
+                        // --- CORRECTION ICI ---
+                        // On utilise findStartDestination().id au lieu de startDestinationId direct
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        // Évite d'empiler plusieurs fois le même écran si on clique vite
                         launchSingleTop = true
+                        // Restaure l'état de scroll quand on revient
                         restoreState = true
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = GreenPrimary, selectedTextColor = GreenPrimary, indicatorColor = GreenLight
+                    selectedIconColor = GreenPrimary,
+                    selectedTextColor = GreenPrimary,
+                    indicatorColor = GreenLight
                 )
             )
         }
@@ -132,20 +141,36 @@ fun BottomNavigationBar(navController: NavHostController) {
 fun NavigationGraph(navController: NavHostController, userId: String) {
     NavHost(navController, startDestination = Screen.Dashboard.route) {
 
-        // 1. DASHBOARD (Directement ici car pas de fichier DashboardScreen.kt dans ton image)
+        // 1. DASHBOARD
         composable(Screen.Dashboard.route) {
-            DashboardScreen(userId = userId)
+            DashboardScreen(
+                userId = userId,
+                onSeeAllClick = {
+                    // CORRECTION ICI : Navigation robuste (identique à la BottomBar)
+                    navController.navigate(Screen.Ingredients.route) {
+                        // 1. On revient au point de départ (Dashboard) avant d'aller ailleurs
+                        // pour ne pas empiler Ingredients par dessus Dashboard indéfiniment
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        // 2. Évite de créer plusieurs instances si on clique vite
+                        launchSingleTop = true
+                        // 3. Restaure l'état (le scroll, etc.) de la page Ingrédients
+                        restoreState = true
+                    }
+                }
+            )
         }
 
+        // 2. INGREDIENTS (My Fridge)
         composable(Screen.Ingredients.route) {
-            IngredientScreen(
+            IngredientsScreen(
                 userId = userId
             )
         }
 
-        // 2. RECETTES (Pointe vers ton fichier RecipeSection.kt)
+        // 3. RECETTES
         composable(Screen.Recipes.route) {
-            // J'assume que dans RecipeSection.kt tu as une fonction @Composable nommée RecipeScreen()
             RecipeScreen(
                 userId = userId
             )

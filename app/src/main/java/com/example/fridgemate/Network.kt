@@ -8,6 +8,7 @@ import retrofit2.http.POST
 import com.google.gson.annotations.SerializedName
 import okhttp3.ResponseBody
 import okhttp3.OkHttpClient
+import retrofit2.http.Path
 import java.util.concurrent.TimeUnit
 
 /* --- 1. LOGIN & USER --- */
@@ -105,7 +106,7 @@ interface FridgeApiService {
 
     // Fridge
     @retrofit2.http.GET("users/{userId}/fridge/ingredients")
-    suspend fun getIngredients(@retrofit2.http.Path("userId") userId: String): IngredientsResponse
+    suspend fun getIngredients(@Path("userId") userId: String?): IngredientsResponse
 
     @retrofit2.http.POST("users/{userId}/fridge/ingredients")
     suspend fun addIngredient(@retrofit2.http.Path("userId") userId: String, @retrofit2.http.Body ingredient: AddIngredientRequest): IngredientData
@@ -116,9 +117,9 @@ interface FridgeApiService {
 
     @retrofit2.http.PUT("users/{userId}/fridge/ingredients/{ingredientId}")
     suspend fun updateIngredient(
-        @retrofit2.http.Path("userId") userId: String,
-        @retrofit2.http.Path("ingredientId") ingredientId: String,
-        @retrofit2.http.Body ingredient: AddIngredientRequest // On réutilise le même objet que pour l'ajout
+        @Path("userId") userId: String?,
+        @Path("ingredientId") ingredientId: String,
+        @Body ingredient: AddIngredientRequest // On réutilise le même objet que pour l'ajout
     ): IngredientData
 
     // Recipes
